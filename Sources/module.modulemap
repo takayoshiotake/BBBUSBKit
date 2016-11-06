@@ -1,0 +1,4 @@
+module  BBBUSBKitPrivate {
+    header "BBBUSBKit-Bridging-Header.h"
+    export *
+}
