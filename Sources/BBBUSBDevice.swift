@@ -15,7 +15,7 @@ public enum BBBUSBDeviceError: Error {
 
 public class BBBUSBDevice: CustomStringConvertible {
     let service: io_service_t
-    let interface: USBDeviceInterface
+    let device: USBDeviceInterface
     public let name: String
     public let path: String
     public let vendorID: UInt16
@@ -40,13 +40,13 @@ public class BBBUSBDevice: CustomStringConvertible {
             return String(cString: pathBytes)
         }()
         
-        guard let plugInInterface = USBPlugInInterface(service), let interface = plugInInterface.queryInterface() else {
+        guard let plugInInterface = USBPlugInInterface(service), let device = plugInInterface.queryInterface() else {
             IOObjectRelease(service)
             return nil // `deinit` is not called
         }
-        self.interface = interface
-        vendorID = interface.vendorID
-        productID = interface.productID
+        self.device = device
+        vendorID = device.vendorID
+        productID = device.productID
     }
     
     deinit {
@@ -55,14 +55,14 @@ public class BBBUSBDevice: CustomStringConvertible {
     
     
     public func open() throws {
-        let err = self.interface.open()
+        let err = device.open()
         if err != kIOReturnSuccess {
             throw BBBUSBDeviceError.IOReturn(err: err)
         }
     }
     
     public func close() throws {
-        let err = self.interface.close()
+        let err = device.close()
         if (err == kIOReturnNotOpen) {
             // Ignore
         }
