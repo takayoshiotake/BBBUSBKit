@@ -22,8 +22,10 @@
     if (self) {
         _plugInInterface = nil;
         SInt32 score;
-        kern_return_t kr = IOCreatePlugInInterfaceForService(service, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &_plugInInterface, &score);
-        if (kr != kIOReturnSuccess) {
+        
+        // Use IOReturn instead kern_return_t
+        IOReturn err = IOCreatePlugInInterfaceForService(service, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &_plugInInterface, &score);
+        if (err != kIOReturnSuccess) {
             return nil;
         }
     }
@@ -32,14 +34,20 @@
 
 - (void)dealloc {
     if (_plugInInterface != nil) {
-        (*_plugInInterface)->Release(_plugInInterface);
+        IOReturn err = (*_plugInInterface)->Release(_plugInInterface);
+        if (err != kIOReturnSuccess) {
+            NSLog(@"Warning: 0x%08X", err);
+        }
     }
 }
 
 - (USBInterface *)queryInterface {
-    IOUSBDeviceInterfaceNew ** interface;
-    (*_plugInInterface)->QueryInterface(_plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceIDNew), (LPVOID)&interface);
-    return [[USBInterface alloc] init:interface];
+    IOUSBDeviceInterfaceLatest ** interface;
+    IOReturn err = (*_plugInInterface)->QueryInterface(_plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceIDLatest), (LPVOID)&interface);
+    if (err != kIOReturnSuccess) {
+        return nil;
+    }
+    return [[USBInterface alloc] init:interface]; // move interface
 }
 
 @end
@@ -47,13 +55,13 @@
 
 @interface USBInterface ()
 
-@property (assign, nonatomic, readwrite) IOUSBDeviceInterfaceNew ** interface;
+@property (assign, nonatomic, readwrite) IOUSBDeviceInterfaceLatest ** interface;
 
 @end
 
 @implementation USBInterface
 
-- (instancetype)init:(IOUSBDeviceInterfaceNew **)interface {
+- (instancetype)init:(IOUSBDeviceInterfaceLatest **)interface {
     self = [super init];
     if (self) {
         _interface = interface;
@@ -62,18 +70,27 @@
 }
 
 - (void)dealloc {
-    (*_interface)->Release(_interface);
+    IOReturn err = (*_interface)->Release(_interface);
+    if (err != kIOReturnSuccess) {
+        NSLog(@"Warning: 0x%08X", err);
+    }
 }
 
 - (UInt16)vendorID {
     UInt16 vid;
-    (*_interface)->GetDeviceVendor(_interface, &vid);
+    IOReturn err = (*_interface)->GetDeviceVendor(_interface, &vid);
+    if (err != kIOReturnSuccess) {
+        return 0;   // FIXME
+    }
     return vid;
 }
 
 - (UInt16)productID {
     UInt16 pid;
-    (*_interface)->GetDeviceProduct(_interface, &pid);
+    IOReturn err = (*_interface)->GetDeviceProduct(_interface, &pid);
+    if (err != kIOReturnSuccess) {
+        return 0;   // FIXME
+    }
     return pid;
 }
 
