@@ -13,7 +13,7 @@
 		12187FE91DCF4412001909E4 /* BBBUSBKitCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 12187FE21DCF4412001909E4 /* BBBUSBKitCore.h */; };
 		12187FEA1DCF4412001909E4 /* BBBUSBKitCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 12187FE31DCF4412001909E4 /* BBBUSBKitCore.m */; };
 		12187FEB1DCF4412001909E4 /* BBBUSBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12187FE41DCF4412001909E4 /* BBBUSBManager.swift */; };
-		12187FF21DCF466F001909E4 /* BBBUSBKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12187FEE1DCF441F001909E4 /* BBBUSBKitTests.swift */; };
+		12187FF91DCF4923001909E4 /* BBBUSBKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12187FF71DCF4923001909E4 /* BBBUSBKitTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,8 +36,8 @@
 		12187FE41DCF4412001909E4 /* BBBUSBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBManager.swift; sourceTree = "<group>"; };
 		12187FE51DCF4412001909E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		12187FE61DCF4412001909E4 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		12187FEE1DCF441F001909E4 /* BBBUSBKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBKitTests.swift; sourceTree = "<group>"; };
-		12187FEF1DCF441F001909E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		12187FF71DCF4923001909E4 /* BBBUSBKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BBBUSBKitTests.swift; path = Tests/BBBUSBKitTests.swift; sourceTree = SOURCE_ROOT; };
+		12187FF81DCF4923001909E4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +94,8 @@
 		12187FED1DCF441F001909E4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				12187FEE1DCF441F001909E4 /* BBBUSBKitTests.swift */,
-				12187FEF1DCF441F001909E4 /* Info.plist */,
+				12187FF71DCF4923001909E4 /* BBBUSBKitTests.swift */,
+				12187FF81DCF4923001909E4 /* Info.plist */,
 			);
 			name = Tests;
 			path = ../_BBBUSBKit/Tests;
@@ -171,6 +171,7 @@
 					12187FCD1DCF4376001909E4 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 78NCYGV39H;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -224,7 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12187FF21DCF466F001909E4 /* BBBUSBKitTests.swift in Sources */,
+				12187FF91DCF4923001909E4 /* BBBUSBKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,12 +384,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 78NCYGV39H;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bigbamboo.BBBUSBKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -397,6 +400,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 78NCYGV39H;
 				INFOPLIST_FILE = Tests/Info.plist;
