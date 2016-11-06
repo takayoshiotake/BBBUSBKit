@@ -26,7 +26,7 @@
         // Use IOReturn instead kern_return_t
         IOReturn err = IOCreatePlugInInterfaceForService(service, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &_plugInInterface, &score);
         if (err != kIOReturnSuccess) {
-            return nil;
+            return nil; // `dealloc` will be called
         }
     }
     return self;

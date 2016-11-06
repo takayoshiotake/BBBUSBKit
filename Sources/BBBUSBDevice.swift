@@ -36,9 +36,14 @@ class BBBUSBDevice {
         }()
         
         guard let plugInInterface = USBPlugInInterface(service), let interface = plugInInterface.queryInterface() else {
-            return nil
-        }        
+            IOObjectRelease(service)
+            return nil // `deinit` is not called
+        }
         vendorID = interface.vendorID
         productID = interface.productID
+    }
+    
+    deinit {
+        IOObjectRelease(service)
     }
 }

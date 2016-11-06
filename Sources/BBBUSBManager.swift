@@ -28,16 +28,8 @@ class BBBUSBManager {
             IOObjectRelease(iterator)
         }
         
-        while true {
-            let service: io_service_t = IOIteratorNext(iterator)
-            if service == 0 {
-                break
-            }
-            defer {
-                IOObjectRelease(service)
-            }
-            
-            if let device = BBBUSBDevice(service: service) {
+        for service in IOServiceSequence(iterator) {
+            if let device = BBBUSBDevice(service: service) { // move service
                 print("service=\(service)")
                 print("- name=\(device.name)")
                 print("- path=\(device.path)")
@@ -45,5 +37,43 @@ class BBBUSBManager {
                 print("- productID=\(String(format: "0x%04x", device.productID))")
             }
         }
+    }
+}
+
+#if false // because "Swift Compiler Error" has occured
+extension io_iterator_t: Sequence {
+    // Swift Compiler Error: Method 'makeIterator()' must be declared public because it matches a requirement in public protocol 'Sequence'
+    // Swift Compiler Error: Method must be declared fileprivate because its result uses a fileprivate type
+    fileprivate func makeIterator() -> IOServiceGenerator {
+        return IOServiceGenerator(self)
+    }
+}
+#else
+fileprivate class IOServiceSequence: Sequence {
+    let iterator: io_iterator_t
+    
+    init(_ iterator: io_iterator_t) {
+        self.iterator = iterator
+    }
+    
+    fileprivate func makeIterator() -> IOServiceGenerator {
+        return IOServiceGenerator(iterator)
+    }
+}
+#endif
+
+fileprivate class IOServiceGenerator: IteratorProtocol {
+    let iterator: io_iterator_t
+    
+    init(_ iterator: io_iterator_t) {
+        self.iterator = iterator
+    }
+    
+    func next() -> io_service_t? {
+        let service = IOIteratorNext(iterator)
+        if service == 0 {
+            return nil
+        }
+        return service
     }
 }
