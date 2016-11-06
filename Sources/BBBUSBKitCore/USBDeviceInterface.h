@@ -17,5 +17,7 @@
 @property (assign, nonatomic, readonly) UInt16 productID;
 
 - (instancetype)init:(IOUSBDeviceInterfaceLatest **)interface;
+- (void)open;
+- (void)close;
 
 @end

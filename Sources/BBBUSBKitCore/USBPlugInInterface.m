@@ -36,7 +36,7 @@
     if (_plugInInterface != nil) {
         IOReturn err = (*_plugInInterface)->Release(_plugInInterface);
         if (err != kIOReturnSuccess) {
-            NSLog(@"Warning: 0x%08X", err);
+            NSLog(@"Warning: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
         }
     }
 }

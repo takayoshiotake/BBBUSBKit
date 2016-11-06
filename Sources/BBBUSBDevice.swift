@@ -9,7 +9,7 @@
 import Foundation
 import BBBUSBKitPrivate
 
-class BBBUSBDevice {
+class BBBUSBDevice: CustomStringConvertible {
     let service: io_service_t
     let interface: USBDeviceInterface
     let name: String
@@ -47,5 +47,12 @@ class BBBUSBDevice {
     
     deinit {
         IOObjectRelease(service)
+    }
+    
+    
+    var description: String {
+        get {
+            return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", vendorID, productID)
+        }
     }
 }

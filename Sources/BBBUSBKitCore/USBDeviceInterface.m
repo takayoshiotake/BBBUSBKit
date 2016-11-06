@@ -25,9 +25,10 @@
 }
 
 - (void)dealloc {
+    [self close];
     IOReturn err = (*_interface)->Release(_interface);
     if (err != kIOReturnSuccess) {
-        NSLog(@"Warning: 0x%08X", err);
+        NSLog(@"Warning: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
     }
 }
 
@@ -47,6 +48,25 @@
         return 0;   // FIXME
     }
     return pid;
+}
+
+- (void)open {
+    IOReturn err = (*_interface)->USBDeviceOpen(_interface);
+    if (err != kIOReturnSuccess) {
+        // TODO:
+        NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
+    }
+}
+
+- (void)close {
+    IOReturn err = (*_interface)->USBDeviceClose(_interface);
+    if (err == kIOReturnNotOpen) {
+        // Ignore
+    }
+    else if (err != kIOReturnSuccess) {
+        // TODO:
+        NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
+    }
 }
 
 @end

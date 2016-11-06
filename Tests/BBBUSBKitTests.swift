@@ -13,7 +13,18 @@ class BBBUSBKitTests: XCTestCase {
     
     func testExample() {
         let um = BBBUSBManager()
-        um.debugPrintAllDevices()
+        if let devices = um.listDevices() {
+            for device in devices {
+                print(device)
+            }
+        }
+    }
+    
+    func testOpen() {
+        let um = BBBUSBManager()
+        if let device = um.listDevices()?.first {
+            device.open()
+        }
     }
     
 }
