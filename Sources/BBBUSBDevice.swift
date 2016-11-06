@@ -11,6 +11,7 @@ import BBBUSBKitPrivate
 
 class BBBUSBDevice {
     let service: io_service_t
+    let interface: USBDeviceInterface
     let name: String
     let path: String
     let vendorID: UInt16
@@ -39,6 +40,7 @@ class BBBUSBDevice {
             IOObjectRelease(service)
             return nil // `deinit` is not called
         }
+        self.interface = interface
         vendorID = interface.vendorID
         productID = interface.productID
     }

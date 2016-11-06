@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 
 #import "BBBUSBKitCore.h"
-#import "USBInterface.h"
+#import "USBDeviceInterface.h"
 
 @interface USBPlugInInterface : NSObject
 
 @property (assign, nonatomic, readonly) IOCFPlugInInterface ** plugInInterface;
 
 - (instancetype)init:(io_service_t)service;
-- (USBInterface *)queryInterface;
+- (USBDeviceInterface *)queryInterface;
 
 @end

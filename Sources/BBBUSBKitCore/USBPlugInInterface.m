@@ -41,13 +41,13 @@
     }
 }
 
-- (USBInterface *)queryInterface {
+- (USBDeviceInterface *)queryInterface {
     IOUSBDeviceInterfaceLatest ** interface;
     IOReturn err = (*_plugInInterface)->QueryInterface(_plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceIDLatest), (LPVOID)&interface);
     if (err != kIOReturnSuccess) {
         return nil;
     }
-    return [[USBInterface alloc] init:interface]; // move interface
+    return [[USBDeviceInterface alloc] init:interface]; // move interface
 }
 
 @end

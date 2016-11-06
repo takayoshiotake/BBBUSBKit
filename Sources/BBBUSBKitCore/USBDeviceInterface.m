@@ -1,20 +1,20 @@
 //
-//  USBInterface.m
+//  USBDeviceInterface.m
 //  BBBUSBKit
 //
 //  Created by OTAKE Takayoshi on 2016/11/06.
 //
 //
 
-#import "USBInterface.h"
+#import "USBDeviceInterface.h"
 
-@interface USBInterface ()
+@interface USBDeviceInterface ()
 
 @property (assign, nonatomic, readwrite) IOUSBDeviceInterfaceLatest ** interface;
 
 @end
 
-@implementation USBInterface
+@implementation USBDeviceInterface
 
 - (instancetype)init:(IOUSBDeviceInterfaceLatest **)interface {
     self = [super init];

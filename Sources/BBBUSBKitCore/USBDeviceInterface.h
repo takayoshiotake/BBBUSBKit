@@ -1,5 +1,5 @@
 //
-//  USBInterface.h
+//  USBDeviceInterface.h
 //  BBBUSBKit
 //
 //  Created by OTAKE Takayoshi on 2016/11/06.
@@ -10,7 +10,7 @@
 
 #import "BBBUSBKitCore.h"
 
-@interface USBInterface : NSObject
+@interface USBDeviceInterface : NSObject
 
 @property (assign, nonatomic, readonly) IOUSBDeviceInterfaceLatest ** interface;
 @property (assign, nonatomic, readonly) UInt16 vendorID;
