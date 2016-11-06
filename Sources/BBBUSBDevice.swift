@@ -10,7 +10,7 @@ import Foundation
 import BBBUSBKitPrivate
 
 public enum BBBUSBDeviceError: Error {
-    case IOReturn(err: IOReturn)
+    case IOReturn(err: Int32)
 }
 
 public class BBBUSBDevice: CustomStringConvertible {
@@ -54,12 +54,21 @@ public class BBBUSBDevice: CustomStringConvertible {
     }
     
     
-    public func open() {
-        
+    public func open() throws {
+        let err = self.interface.open()
+        if err != kIOReturnSuccess {
+            throw BBBUSBDeviceError.IOReturn(err: err)
+        }
     }
     
-    public func close() {
-        
+    public func close() throws {
+        let err = self.interface.close()
+        if (err == kIOReturnNotOpen) {
+            // Ignore
+        }
+        else if (err != kIOReturnSuccess) {
+            throw BBBUSBDeviceError.IOReturn(err: err)
+        }
     }
     
     public var description: String {

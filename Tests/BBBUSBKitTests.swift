@@ -23,7 +23,15 @@ class BBBUSBKitTests: XCTestCase {
     func testOpen() {
         let um = BBBUSBManager()
         if let device = um.listDevices()?.first {
-            device.open()
+            do {
+                try device.open()
+            }
+            catch BBBUSBDeviceError.IOReturn(let err) {
+                print(String(format: "err=0x%08x", err))
+            }
+            catch {
+            }
+            try! device.close() // will ignore error `kIOReturnNotOpen`
         }
     }
     

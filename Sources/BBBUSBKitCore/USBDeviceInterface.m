@@ -50,23 +50,23 @@
     return pid;
 }
 
-- (void)open {
+- (IOReturn)open {
     IOReturn err = (*_interface)->USBDeviceOpen(_interface);
     if (err != kIOReturnSuccess) {
-        // TODO:
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
     }
+    return err;
 }
 
-- (void)close {
+- (IOReturn)close {
     IOReturn err = (*_interface)->USBDeviceClose(_interface);
     if (err == kIOReturnNotOpen) {
         // Ignore
     }
     else if (err != kIOReturnSuccess) {
-        // TODO:
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
     }
+    return err;
 }
 
 @end
