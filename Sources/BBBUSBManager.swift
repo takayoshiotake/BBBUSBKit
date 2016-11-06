@@ -11,7 +11,7 @@ import BBBUSBKitPrivate
 
 fileprivate let kIOUSBDeviceClassName = "IOUSBDevice"
 
-class BBBUSBManager {
+public class BBBUSBManager {
     public init() {
     }
     

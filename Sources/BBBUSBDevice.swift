@@ -9,13 +9,17 @@
 import Foundation
 import BBBUSBKitPrivate
 
-class BBBUSBDevice: CustomStringConvertible {
+public enum BBBUSBDeviceError: Error {
+    case IOReturn(err: IOReturn)
+}
+
+public class BBBUSBDevice: CustomStringConvertible {
     let service: io_service_t
     let interface: USBDeviceInterface
-    let name: String
-    let path: String
-    let vendorID: UInt16
-    let productID: UInt16
+    public let name: String
+    public let path: String
+    public let vendorID: UInt16
+    public let productID: UInt16
     
     init?(service: io_service_t) {
         self.service = service
@@ -50,7 +54,7 @@ class BBBUSBDevice: CustomStringConvertible {
     }
     
     
-    var description: String {
+    public var description: String {
         get {
             return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", vendorID, productID)
         }
