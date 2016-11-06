@@ -14,24 +14,3 @@
 
 typedef IOUSBDeviceInterface650 IOUSBDeviceInterfaceLatest;
 #define kIOUSBDeviceInterfaceIDLatest kIOUSBDeviceInterfaceID650
-
-
-@interface USBInterface : NSObject
-
-@property (assign, nonatomic, readonly) IOUSBDeviceInterfaceLatest ** interface;
-@property (assign, nonatomic, readonly) UInt16 vendorID;
-@property (assign, nonatomic, readonly) UInt16 productID;
-
-- (instancetype)init:(IOUSBDeviceInterfaceLatest **)interface;
-
-@end
-
-
-@interface USBPlugInInterface : NSObject
-
-@property (assign, nonatomic, readonly) IOCFPlugInInterface ** plugInInterface;
-
-- (instancetype)init:(io_service_t)service;
-- (USBInterface *)queryInterface;
-
-@end
