@@ -54,6 +54,14 @@ public class BBBUSBDevice: CustomStringConvertible {
     }
     
     
+    public func open() {
+        
+    }
+    
+    public func close() {
+        
+    }
+    
     public var description: String {
         get {
             return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", vendorID, productID)
