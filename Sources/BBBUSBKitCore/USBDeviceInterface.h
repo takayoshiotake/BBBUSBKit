@@ -13,8 +13,10 @@
 @interface USBDeviceInterface : NSObject
 
 @property (assign, nonatomic, readonly) IOUSBDeviceInterfaceLatest ** device;
-@property (assign, nonatomic, readonly) UInt16 vendorID;
-@property (assign, nonatomic, readonly) UInt16 productID;
+@property (assign, nonatomic, readonly) IOUSBDeviceDescriptor deviceDescriptor;
+@property (strong, nonatomic, readonly) NSString * deviceManufacturer;
+@property (strong, nonatomic, readonly) NSString * deviceProduct;
+@property (strong, nonatomic, readonly) NSString * deviceSerialNumber;
 
 - (instancetype)init:(IOUSBDeviceInterfaceLatest **)device;
 - (IOReturn)open;

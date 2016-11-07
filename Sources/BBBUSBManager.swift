@@ -36,30 +36,6 @@ public class BBBUSBManager {
         }
         return devices
     }
-    
-    public func debugPrintAllDevices() {
-        var iterator: io_iterator_t = io_iterator_t()
-        
-        let matchingInformation = IOServiceMatching(kIOUSBDeviceClassName)
-        let kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingInformation, &iterator)
-        if kr != kIOReturnSuccess {
-            print("Error")
-            return
-        }
-        defer {
-            IOObjectRelease(iterator)
-        }
-        
-        for service in IOServiceSequence(iterator) {
-            if let device = BBBUSBDevice(service: service) { // move service
-                print("service=\(service)")
-                print("- name=\(device.name)")
-                print("- path=\(device.path)")
-                print("- vendorID=\(String(format: "0x%04x", device.vendorID))")
-                print("- productID=\(String(format: "0x%04x", device.productID))")
-            }
-        }
-    }
 }
 
 #if false // because "Swift Compiler Error" has occured

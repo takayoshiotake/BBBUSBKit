@@ -18,8 +18,6 @@ public class BBBUSBDevice: CustomStringConvertible {
     let device: USBDeviceInterface
     public let name: String
     public let path: String
-    public let vendorID: UInt16
-    public let productID: UInt16
     
     init?(service: io_service_t) {
         self.service = service
@@ -45,8 +43,6 @@ public class BBBUSBDevice: CustomStringConvertible {
             return nil // `deinit` is not called
         }
         self.device = device
-        vendorID = device.vendorID
-        productID = device.productID
     }
     
     deinit {
@@ -73,7 +69,7 @@ public class BBBUSBDevice: CustomStringConvertible {
     
     public var description: String {
         get {
-            return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", vendorID, productID)
+            return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", device.deviceDescriptor.idVendor, device.deviceDescriptor.idProduct)
         }
     }
 }
