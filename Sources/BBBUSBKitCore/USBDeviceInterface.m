@@ -30,7 +30,8 @@
 }
 
 - (void)dealloc {
-    [self close];
+    NSError * error = nil;
+    [self close:&error]; // ignore error
     IOReturn err = (*_device)->Release(_device);
     if (err != kIOReturnSuccess) {
         NSLog(@"Warning: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
@@ -105,27 +106,30 @@
     return [[NSString alloc] initWithBytes:&string[2] length:string[0] - 2 encoding:NSUTF16LittleEndianStringEncoding];
 }
 
-
-- (IOReturn)open {
+- (BOOL)open:(NSError **)error {
     // DEBUG:
     [self checkConfiguration];
     
     IOReturn err = (*_device)->USBDeviceOpenSeize(_device);
     if (err != kIOReturnSuccess) {
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
+        *error = [NSError BBBUSBKitErrorWithIOReturn:err];
+        return false;
     }
-    return err;
+    return true;
 }
 
-- (IOReturn)close {
+- (BOOL)close:(NSError **)error {
     IOReturn err = (*_device)->USBDeviceClose(_device);
     if (err == kIOReturnNotOpen) {
         // Ignore
     }
     else if (err != kIOReturnSuccess) {
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
+        *error = [NSError BBBUSBKitErrorWithIOReturn:err];
+        return false;
     }
-    return err;
+    return true;
 }
 
 - (IOReturn)checkConfiguration {

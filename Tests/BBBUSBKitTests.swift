@@ -26,7 +26,7 @@ class BBBUSBKitTests: XCTestCase {
             do {
                 try device.open()
             }
-            catch BBBUSBDeviceError.IOReturn(let err) {
+            catch BBBUSBDeviceError.IOReturnError(let err) {
                 print(String(format: "err=0x%08x", err))
             }
             catch {
