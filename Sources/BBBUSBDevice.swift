@@ -13,6 +13,38 @@ public enum BBBUSBDeviceError: Error {
     case IOReturnError(err: Int)
 }
 
+public struct USBDeviceDescriptor {
+    public let bLength: UInt8
+    public let bDescriptorType: UInt8
+    public let bcdUSB: UInt16
+    public let bDeviceClass: UInt8
+    public let bDeviceSubClass: UInt8
+    public let bDeviceProtocol: UInt8
+    public let bMaxPacketSize0: UInt8
+    public let idVendor: UInt16
+    public let idProduct: UInt16
+    public let bcdDevice: UInt16
+    public let iManufacturer: UInt8
+    public let iProduct: UInt8
+    public let iSerialNumber: UInt8
+    public let bNumConfigurations: UInt8
+    
+    public let manufacturer: String?
+    public let product: String?
+    public let serialNumber: String?
+}
+
+public struct USBConfigurationDescriptor {
+    public let bLength: UInt8
+    public let bDescriptorType: UInt8
+    public let wTotalLength: UInt16
+    public let bNumInterfaces: UInt8
+    public let bConfigurationValue: UInt8
+    public let iConfiguration: UInt8
+    public let bmAttributes: UInt8
+    public let bMaxPower: UInt8
+}
+
 public class BBBUSBDevice: CustomStringConvertible {
     let service: io_service_t
     let device: USBDeviceInterface
@@ -49,6 +81,21 @@ public class BBBUSBDevice: CustomStringConvertible {
         IOObjectRelease(service)
     }
     
+    public var deviceDescriptor: USBDeviceDescriptor {
+        get {
+            let dd = device.deviceDescriptor
+            return USBDeviceDescriptor(bLength: dd.bLength, bDescriptorType: dd.bDescriptorType, bcdUSB: dd.bcdUSB, bDeviceClass: dd.bDeviceClass, bDeviceSubClass: dd.bDeviceSubClass, bDeviceProtocol: dd.bDeviceProtocol, bMaxPacketSize0: dd.bMaxPacketSize0, idVendor: dd.idVendor, idProduct: dd.idProduct, bcdDevice: dd.bcdDevice, iManufacturer: dd.iManufacturer, iProduct: dd.iProduct, iSerialNumber: dd.iSerialNumber, bNumConfigurations: dd.bNumConfigurations, manufacturer: device.deviceManufacturer, product: device.deviceProduct, serialNumber: device.deviceSerialNumber)
+        }
+    }
+    
+    public func getConfigurationDescriptor() throws -> USBConfigurationDescriptor {
+        let configurationDescriptor = try withBridgingIOReturnError {
+            try device.getConfigurationDescriptor()
+        }
+        return configurationDescriptor.withMemoryRebound(to: USBConfigurationDescriptor.self, capacity: 1) {
+            $0.pointee
+        }
+    }
     
     public func open() throws {
         let err = device.open()
@@ -73,3 +120,14 @@ public class BBBUSBDevice: CustomStringConvertible {
         }
     }
 }
+
+
+private func withBridgingIOReturnError<T>(block: () throws -> T) throws -> T {
+    do {
+        return try block()
+    }
+    catch let error as NSError where error.domain == kBBBUSBKitIOReturnErrorDomain {
+        throw BBBUSBDeviceError.IOReturnError(err: error.code)
+    }
+}
+

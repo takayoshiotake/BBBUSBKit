@@ -74,9 +74,6 @@
     _deviceManufacturer = [self getStringDescriptor:_deviceDescriptor.iManufacturer];
     _deviceProduct = [self getStringDescriptor:_deviceDescriptor.iProduct];
     _deviceSerialNumber = [self getStringDescriptor:_deviceDescriptor.iSerialNumber];
-    
-    // DEBUG:
-    NSLog(@"manufacturer=\"%@\", product=\"%@\", serialNumber=\"%@\"", _deviceManufacturer, _deviceProduct, _deviceSerialNumber);
 }
 
 - (NSString *)getStringDescriptor:(UInt8)index {
@@ -105,11 +102,19 @@
     return [[NSString alloc] initWithBytes:&string[2] length:string[0] - 2 encoding:NSUTF16LittleEndianStringEncoding];
 }
 
+- (IOUSBConfigurationDescriptor *)getConfigurationDescriptor:(NSError **)error {
+    UInt8 configIndex = 0;
+    IOUSBConfigurationDescriptorPtr configurationDescriptor;
+    IOReturn err = (*_device)->GetConfigurationDescriptorPtr(_device, configIndex, &configurationDescriptor);
+    if (err != kIOReturnSuccess) {
+        NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
+        *error = [NSError BBBUSBKitErrorWithIOReturnError: err];
+        return nil;
+    }
+    return configurationDescriptor;
+}
 
 - (IOReturn)open {
-    // DEBUG:
-    [self checkConfiguration];
-    
     IOReturn err = (*_device)->USBDeviceOpenSeize(_device);
     if (err != kIOReturnSuccess) {
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
@@ -123,16 +128,6 @@
         // Ignore
     }
     else if (err != kIOReturnSuccess) {
-        NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
-    }
-    return err;
-}
-
-- (IOReturn)checkConfiguration {
-    UInt8 configIndex = 0;
-    IOUSBConfigurationDescriptorPtr desc;
-    IOReturn err = (*_device)->GetConfigurationDescriptorPtr(_device, configIndex, &desc);
-    if (err != kIOReturnSuccess) {
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
     }
     return err;

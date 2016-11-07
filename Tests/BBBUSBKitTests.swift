@@ -15,7 +15,15 @@ class BBBUSBKitTests: XCTestCase {
         let um = BBBUSBManager()
         if let devices = um.listDevices() {
             for device in devices {
-                print(device)
+                do {
+                    let deviceDescriptor = device.deviceDescriptor
+                    let configurationDescriptor = try device.getConfigurationDescriptor()
+                    
+                    print("deviceDescriptor=\(deviceDescriptor)")
+                    print("configurationDescriptor=\(configurationDescriptor)")
+                }
+                catch {
+                }
             }
         }
     }
