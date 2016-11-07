@@ -18,7 +18,6 @@
 		1218800B1DCF5FC2001909E4 /* USBDeviceInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 121880071DCF5FC2001909E4 /* USBDeviceInterface.m */; };
 		1218800C1DCF5FC2001909E4 /* USBPlugInInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 121880081DCF5FC2001909E4 /* USBPlugInInterface.h */; };
 		1218800D1DCF5FC2001909E4 /* USBPlugInInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 121880091DCF5FC2001909E4 /* USBPlugInInterface.m */; };
-		12D32A6E1DD0A7ED00898D95 /* BBBUSBKitCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D32A6D1DD0A7ED00898D95 /* BBBUSBKitCore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +46,6 @@
 		121880071DCF5FC2001909E4 /* USBDeviceInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USBDeviceInterface.m; path = BBBUSBKitCore/USBDeviceInterface.m; sourceTree = "<group>"; };
 		121880081DCF5FC2001909E4 /* USBPlugInInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USBPlugInInterface.h; path = BBBUSBKitCore/USBPlugInInterface.h; sourceTree = "<group>"; };
 		121880091DCF5FC2001909E4 /* USBPlugInInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USBPlugInInterface.m; path = BBBUSBKitCore/USBPlugInInterface.m; sourceTree = "<group>"; };
-		12D32A6D1DD0A7ED00898D95 /* BBBUSBKitCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBUSBKitCore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +92,6 @@
 				12187FE41DCF4412001909E4 /* BBBUSBManager.swift */,
 				12187FFB1DCF49FE001909E4 /* BBBUSBDevice.swift */,
 				12187FE21DCF4412001909E4 /* BBBUSBKitCore.h */,
-				12D32A6D1DD0A7ED00898D95 /* BBBUSBKitCore.m */,
 				121880051DCF5F90001909E4 /* BBBUSBKitCore */,
 				12187FE01DCF4412001909E4 /* BBBUSBKit-Bridging-Header.h */,
 				12187FE51DCF4412001909E4 /* Info.plist */,
@@ -243,7 +240,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1218800B1DCF5FC2001909E4 /* USBDeviceInterface.m in Sources */,
-				12D32A6E1DD0A7ED00898D95 /* BBBUSBKitCore.m in Sources */,
 				1218800D1DCF5FC2001909E4 /* USBPlugInInterface.m in Sources */,
 				12187FFC1DCF49FE001909E4 /* BBBUSBDevice.swift in Sources */,
 				12187FEB1DCF4412001909E4 /* BBBUSBManager.swift in Sources */,

@@ -10,7 +10,7 @@ import Foundation
 import BBBUSBKitPrivate
 
 public enum BBBUSBDeviceError: Error {
-    case IOReturnError(err: Int)
+    case IOReturn(err: Int32)
 }
 
 public class BBBUSBDevice: CustomStringConvertible {
@@ -46,20 +46,24 @@ public class BBBUSBDevice: CustomStringConvertible {
     }
     
     deinit {
-        try? device.close()
         IOObjectRelease(service)
     }
     
     
     public func open() throws {
-        try withBridgingObjCError {
-            try device.open()
+        let err = device.open()
+        if err != kIOReturnSuccess {
+            throw BBBUSBDeviceError.IOReturn(err: err)
         }
     }
     
     public func close() throws {
-        try withBridgingObjCError {
-            try device.close()
+        let err = device.close()
+        if (err == kIOReturnNotOpen) {
+            // Ignore
+        }
+        else if (err != kIOReturnSuccess) {
+            throw BBBUSBDeviceError.IOReturn(err: err)
         }
     }
     
@@ -69,14 +73,3 @@ public class BBBUSBDevice: CustomStringConvertible {
         }
     }
 }
-
-private func withBridgingObjCError<T>(block: () throws -> T) throws -> T {
-    do {
-        return try block()
-    }
-    catch let error as NSError where error.domain == kBBBUSBKitIOReturnErrorDomain {
-        throw BBBUSBDeviceError.IOReturnError(err: error.code)
-    }
-}
-
-

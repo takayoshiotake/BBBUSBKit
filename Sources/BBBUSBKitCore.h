@@ -14,9 +14,3 @@
 
 typedef IOUSBDeviceInterface650 IOUSBDeviceInterfaceLatest;
 #define kIOUSBDeviceInterfaceIDLatest kIOUSBDeviceInterfaceID650
-
-
-static const NSErrorDomain kBBBUSBKitIOReturnErrorDomain = @"com.bigbamboo.BBBUSBKit.IOReturn";
-@interface NSError (BBBUSBKit_IOReturn)
-+ (NSError *)BBBUSBKitErrorWithIOReturn:(IOReturn)code;
-@end

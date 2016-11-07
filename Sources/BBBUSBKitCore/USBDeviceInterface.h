@@ -19,7 +19,7 @@
 @property (strong, nonatomic, readonly) NSString * deviceSerialNumber;
 
 - (instancetype)init:(IOUSBDeviceInterfaceLatest **)device;
-- (BOOL)open:(NSError **)error;
-- (BOOL)close:(NSError **)error;
+- (IOReturn)open;
+- (IOReturn)close;
 
 @end
