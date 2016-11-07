@@ -10,7 +10,7 @@ import Foundation
 import BBBUSBKitPrivate
 
 public enum BBBUSBDeviceError: Error {
-    case IOReturn(err: Int32)
+    case IOReturnError(err: Int)
 }
 
 public class BBBUSBDevice: CustomStringConvertible {
@@ -53,7 +53,7 @@ public class BBBUSBDevice: CustomStringConvertible {
     public func open() throws {
         let err = device.open()
         if err != kIOReturnSuccess {
-            throw BBBUSBDeviceError.IOReturn(err: err)
+            throw BBBUSBDeviceError.IOReturnError(err: Int(err))
         }
     }
     
@@ -63,7 +63,7 @@ public class BBBUSBDevice: CustomStringConvertible {
             // Ignore
         }
         else if (err != kIOReturnSuccess) {
-            throw BBBUSBDeviceError.IOReturn(err: err)
+            throw BBBUSBDeviceError.IOReturnError(err: Int(err))
         }
     }
     
