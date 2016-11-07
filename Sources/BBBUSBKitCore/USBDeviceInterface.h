@@ -23,5 +23,6 @@
 - (IOUSBConfigurationDescriptor *)getConfigurationDescriptor:(NSError **)error;
 - (IOReturn)open;
 - (IOReturn)close;
+- (IOReturn)getUSBInterfaceIterator:(io_iterator_t *)iterator;
 
 @end

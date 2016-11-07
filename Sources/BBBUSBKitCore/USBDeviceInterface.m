@@ -133,4 +133,17 @@
     return err;
 }
 
+- (IOReturn)getUSBInterfaceIterator:(io_iterator_t *)iterator {
+    IOUSBFindInterfaceRequest request;
+    request.bInterfaceClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
+    request.bAlternateSetting = kIOUSBFindInterfaceDontCare;
+    IOReturn err = (*_device)->CreateInterfaceIterator(_device, &request, iterator);
+    if (err != kIOReturnSuccess) {
+        NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
+    }
+    return err;
+}
+
 @end

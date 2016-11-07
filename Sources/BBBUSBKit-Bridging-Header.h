@@ -10,3 +10,4 @@
 
 #import "USBPlugInInterface.h"
 #import "USBDeviceInterface.h"
+#import "USBInterfaceInterface.h"

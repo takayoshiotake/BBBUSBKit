@@ -41,13 +41,22 @@
     }
 }
 
-- (USBDeviceInterface *)queryInterface {
+- (USBDeviceInterface *)queryUSBDeviceInterface {
     IOUSBDeviceInterfaceLatest ** device;
     IOReturn err = (*_plugInInterface)->QueryInterface(_plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceIDLatest), (LPVOID)&device);
     if (err != kIOReturnSuccess) {
         return nil;
     }
     return [[USBDeviceInterface alloc] init:device]; // move device
+}
+
+- (USBInterfaceInterface *)queryUSBInterfaceInterface {
+    IOUSBInterfaceInterfaceLatest ** interface;
+    IOReturn err = (*_plugInInterface)->QueryInterface(_plugInInterface, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceIDLatest), (LPVOID)&interface);
+    if (err != kIOReturnSuccess) {
+        return nil;
+    }
+    return [[USBInterfaceInterface alloc] init:interface]; // move interface
 }
 
 @end

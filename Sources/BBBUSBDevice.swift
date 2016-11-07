@@ -3,7 +3,7 @@
 //  BBBUSBKit
 //
 //  Created by OTAKE Takayoshi on 2016/11/06.
-//  Copyright © 2016 OTAKE Takayoshi. All rights reserved.
+//
 //
 
 import Foundation
@@ -70,7 +70,7 @@ public class BBBUSBDevice: CustomStringConvertible {
             return String(cString: pathBytes)
         }()
         
-        guard let plugInInterface = USBPlugInInterface(service), let device = plugInInterface.queryInterface() else {
+        guard let plugInInterface = USBPlugInInterface(service), let device = plugInInterface.queryUSBDeviceInterface() else {
             IOObjectRelease(service)
             return nil // `deinit` is not called
         }
@@ -112,6 +112,25 @@ public class BBBUSBDevice: CustomStringConvertible {
         else if (err != kIOReturnSuccess) {
             throw BBBUSBDeviceError.IOReturnError(err: Int(err))
         }
+    }
+    
+    public func listInterfaces() throws -> [BBBUSBInterface] {
+        var iterator = io_iterator_t()
+        let err = device.getUSBInterfaceIterator(&iterator)
+        if err != kIOReturnSuccess {
+            throw BBBUSBDeviceError.IOReturnError(err: Int(err))
+        }
+        defer {
+            IOObjectRelease(iterator)
+        }
+        
+        var interfaces: [BBBUSBInterface] = []
+        for service in IOServiceSequence(iterator) {
+            if let interface = BBBUSBInterface(service: service) { // move service
+                interfaces.append(interface)
+            }
+        }
+        return interfaces
     }
     
     public var description: String {

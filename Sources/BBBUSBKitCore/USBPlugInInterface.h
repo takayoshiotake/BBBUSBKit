@@ -10,12 +10,14 @@
 
 #import "BBBUSBKitCore.h"
 #import "USBDeviceInterface.h"
+#import "USBInterfaceInterface.h"
 
 @interface USBPlugInInterface : NSObject
 
 @property (assign, nonatomic, readonly) IOCFPlugInInterface ** plugInInterface;
 
 - (instancetype)init:(io_service_t)service;
-- (USBDeviceInterface *)queryInterface;
+- (USBDeviceInterface *)queryUSBDeviceInterface;
+- (USBInterfaceInterface *)queryUSBInterfaceInterface;
 
 @end
