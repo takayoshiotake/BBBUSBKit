@@ -57,7 +57,7 @@
     if (err != kIOReturnSuccess) {
         return nil;
     }
-    return [[USBDeviceInterface alloc] init:device]; // move device
+    return [[USBDeviceInterface alloc] initWithDevice:device]; // move device
 }
 
 - (USBInterfaceInterface *)queryUSBInterfaceInterface {
@@ -66,7 +66,7 @@
     if (err != kIOReturnSuccess) {
         return nil;
     }
-    return [[USBInterfaceInterface alloc] init:interface]; // move interface
+    return [[USBInterfaceInterface alloc] initWithInterface:interface]; // move interface
 }
 
 @end

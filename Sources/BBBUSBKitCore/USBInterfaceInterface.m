@@ -16,7 +16,7 @@
 
 @implementation USBInterfaceInterface
 
-- (instancetype)init:(IOUSBInterfaceInterfaceLatest **)interface {
+- (instancetype)initWithInterface:(IOUSBInterfaceInterfaceLatest **)interface {
     self = [super init];
     if (self) {
         _interface = interface;

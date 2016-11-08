@@ -20,7 +20,7 @@
 
 @implementation USBDeviceInterface
 
-- (instancetype)init:(IOUSBDeviceInterfaceLatest **)device {
+- (instancetype)initWithDevice:(IOUSBDeviceInterfaceLatest **)device {
     self = [super init];
     if (self) {
         _device = device;

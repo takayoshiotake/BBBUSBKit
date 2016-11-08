@@ -14,6 +14,6 @@
 
 @property (assign, nonatomic, readonly) IOUSBInterfaceInterfaceLatest ** interface;
 
-- (instancetype)init:(IOUSBInterfaceInterfaceLatest **)interface;
+- (instancetype)initWithInterface:(IOUSBInterfaceInterfaceLatest **)interface;
 
 @end
