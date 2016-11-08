@@ -12,15 +12,17 @@ import BBBUSBKitPrivate
 public class BBBUSBInterface {
     let service: io_service_t
     let interface: USBInterfaceInterface
+    weak var device: BBBUSBDevice!
     
-    init?(service: io_service_t) {
+    init?(service: io_service_t, device: BBBUSBDevice) {
         self.service = service
 
-        guard let plugInInterface = USBPlugInInterface(service: service, plugInType: .interface), let interface = plugInInterface.queryUSBInterfaceInterface() else {
+        guard let plugInInterface = USBPlugInInterface(service: service, plugInType: .interface), let interface = plugInInterface.queryUSBInterfaceInterface(device.device) else {
             IOObjectRelease(service)
             return nil // `deinit` is not called
         }
         self.interface = interface
+        self.device = device
     }
     
     deinit {

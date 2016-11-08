@@ -23,7 +23,8 @@ typedef NS_ENUM(NSUInteger, USBPlugInInterfacePlugInType) {
 @property (assign, nonatomic, readonly) IOCFPlugInInterface ** plugInInterface;
 
 - (instancetype)initWithService:(io_service_t)service plugInType:(USBPlugInInterfacePlugInType)plugInType;
+// FIXME: simplize
 - (USBDeviceInterface *)queryUSBDeviceInterface;
-- (USBInterfaceInterface *)queryUSBInterfaceInterface;
+- (USBInterfaceInterface *)queryUSBInterfaceInterface:(USBDeviceInterface *)device;
 
 @end

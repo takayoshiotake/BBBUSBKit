@@ -44,4 +44,23 @@ class BBBUSBKitTests: XCTestCase {
         }
     }
     
+    func testMyUSBDevice() {
+        // PIC18F14K50
+        let idVendor = 0x04d8 as UInt16
+        let idProduct = 0x003f as UInt16
+        let um = BBBUSBManager()
+        if let device = um.listDevices()?.filter({ $0.deviceDescriptor.idVendor == idVendor && $0.deviceDescriptor.idProduct == idProduct }).first {
+            XCTAssertEqual(device.deviceDescriptor.product, "Simple HID Device Demo")
+            
+            do {
+//                try device.open()
+                try device.listInterfaces()
+            }
+            catch {
+                
+            }
+            try! device.close()
+        }
+    }
+    
 }

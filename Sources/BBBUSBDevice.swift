@@ -126,7 +126,7 @@ public class BBBUSBDevice: CustomStringConvertible {
         
         var interfaces: [BBBUSBInterface] = []
         for service in IOServiceSequence(iterator) {
-            if let interface = BBBUSBInterface(service: service) { // move service
+            if let interface = BBBUSBInterface(service: service, device: self) { // move service
                 interfaces.append(interface)
             }
         }
