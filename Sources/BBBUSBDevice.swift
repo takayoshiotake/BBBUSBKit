@@ -70,7 +70,7 @@ public class BBBUSBDevice: CustomStringConvertible {
             return String(cString: pathBytes)
         }()
         
-        guard let plugInInterface = USBPlugInInterface(service), let device = plugInInterface.queryUSBDeviceInterface() else {
+        guard let plugInInterface = USBPlugInInterface(service: service, plugInType: .device), let device = plugInInterface.queryUSBDeviceInterface() else {
             IOObjectRelease(service)
             return nil // `deinit` is not called
         }

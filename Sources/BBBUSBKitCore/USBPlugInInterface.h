@@ -12,11 +12,17 @@
 #import "USBDeviceInterface.h"
 #import "USBInterfaceInterface.h"
 
+
+typedef NS_ENUM(NSUInteger, USBPlugInInterfacePlugInType) {
+    USBPlugInInterfacePlugInTypeDevice,
+    USBPlugInInterfacePlugInTypeInterface,
+};
+
 @interface USBPlugInInterface : NSObject
 
 @property (assign, nonatomic, readonly) IOCFPlugInInterface ** plugInInterface;
 
-- (instancetype)init:(io_service_t)service;
+- (instancetype)initWithService:(io_service_t)service plugInType:(USBPlugInInterfacePlugInType)plugInType;
 - (USBDeviceInterface *)queryUSBDeviceInterface;
 - (USBInterfaceInterface *)queryUSBInterfaceInterface;
 

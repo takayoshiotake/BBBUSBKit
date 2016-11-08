@@ -33,6 +33,7 @@ class BBBUSBKitTests: XCTestCase {
         if let device = um.listDevices()?.first {
             do {
                 try device.open()
+                try device.listInterfaces()
             }
             catch BBBUSBDeviceError.IOReturnError(let err) {
                 print(String(format: "err=0x%08x", err))

@@ -17,14 +17,24 @@
 
 @implementation USBPlugInInterface
 
-- (instancetype)init:(io_service_t)service {
+- (instancetype)initWithService:(io_service_t)service plugInType:(USBPlugInInterfacePlugInType)plugInType {
     self = [super init];
     if (self) {
         _plugInInterface = nil;
         SInt32 score;
         
         // Use IOReturn instead kern_return_t
-        IOReturn err = IOCreatePlugInInterfaceForService(service, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &_plugInInterface, &score);
+        IOReturn err;
+        switch (plugInType) {
+            case USBPlugInInterfacePlugInTypeDevice:
+                err = IOCreatePlugInInterfaceForService(service, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &_plugInInterface, &score);
+                break;
+            case USBPlugInInterfacePlugInTypeInterface:
+                err = IOCreatePlugInInterfaceForService(service, kIOUSBInterfaceUserClientTypeID, kIOCFPlugInInterfaceID, &_plugInInterface, &score);
+                break;
+            default:
+                err = kIOReturnError;
+        }
         if (err != kIOReturnSuccess) {
             return nil; // `dealloc` will be called
         }
@@ -34,7 +44,7 @@
 
 - (void)dealloc {
     if (_plugInInterface != nil) {
-        IOReturn err = (*_plugInInterface)->Release(_plugInInterface);
+        IOReturn err = IODestroyPlugInInterface(_plugInInterface);
         if (err != kIOReturnSuccess) {
             NSLog(@"Warning: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
         }
