@@ -54,7 +54,16 @@ class BBBUSBKitTests: XCTestCase {
             
             do {
 //                try device.open()
-                try device.listInterfaces()
+                let interfaces = try device.listInterfaces()
+                for interface in interfaces {
+                    do {
+                        let interfaceDescriptor = interface.interfaceDescriptor
+                        
+                        print("interfaceDescriptor=\(interfaceDescriptor)")
+                    }
+                    catch {
+                    }
+                }
             }
             catch {
                 
