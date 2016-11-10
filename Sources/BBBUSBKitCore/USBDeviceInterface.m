@@ -61,14 +61,10 @@
     (*_device)->USBGetSerialNumberStringIndex(_device, &_deviceDescriptor.iSerialNumber);
     (*_device)->GetNumberOfConfigurations(_device, &_deviceDescriptor.bNumConfigurations);
 #else
-    IOUSBDevRequest request;
-    request.bmRequestType = USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice);
-    request.bRequest = kUSBRqGetDescriptor;
-    request.wValue = kUSBDeviceDesc << 8;
-    request.wIndex = 0;
-    request.wLength = sizeof(_deviceDescriptor);
-    request.pData = &_deviceDescriptor;
-    (*_device)->DeviceRequest(_device, &request);
+    IOReturn err = [self controlTransferOnDefaultPipeWithRequestType:USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice) request:kUSBRqGetDescriptor value:kUSBDeviceDesc << 8 index:0 length:sizeof(_deviceDescriptor) data:&_deviceDescriptor];
+    if (err != kIOReturnSuccess) {
+        // TODO:
+    }
 #endif
     // I faced that it is not possible to get the following values, with MacBook (Retina, 12-inch, Early 2016) and Anker Premium USB-C hub. However, it was possible to get the values (BUFFALO, USB3.0 Card Reader, 201006010301) with the USC-C hub.
     _deviceManufacturer = [self getStringDescriptor:_deviceDescriptor.iManufacturer];
@@ -144,6 +140,17 @@
         NSLog(@"Error: 0x%08x at %s, line %d", err, __PRETTY_FUNCTION__, __LINE__);
     }
     return err;
+}
+
+/// MARK: - private
+
+/// Endpoint 0
+- (IOReturn)controlTransferOnDefaultPipeWithRequestType:(UInt8)bmRequestType request:(UInt8)bRequest value:(UInt16)wValue index:(UInt16)wIndex length:(UInt16)wLength data:(void *)pData {
+    return [self controlTransferOnDefaultPipeWithRequest:(IOUSBDevRequest){ bmRequestType, bRequest, wValue, wIndex, wLength, pData }];
+}
+
+- (IOReturn)controlTransferOnDefaultPipeWithRequest:(IOUSBDevRequest)request {
+    return (*_device)->DeviceRequest(_device, &request);
 }
 
 @end
