@@ -68,3 +68,14 @@ public struct USBEndpointDescriptor {
     public let wMaxPacketSize: UInt16
     public let bInterval: UInt8
 }
+
+public enum USBDescriptorType : UInt8 {
+    case device = 1
+    case configuration = 2
+    case string = 3
+    case interface = 4
+    case endpoint = 5
+    case deviceQualifier = 6
+    case otherSpeedConfiguration = 7
+    case interfacePower = 8
+}

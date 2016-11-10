@@ -13,6 +13,41 @@ public enum BBBUSBDeviceError: Error {
     case IOReturnError(err: Int)
 }
 
+enum DeviceRequestRequestTypeDirection: UInt8 {
+    case toDevice = 0
+    case toHost = 1
+}
+
+enum DeviceRequestRequestTypeType: UInt8 {
+    case standard = 0
+    case `class` = 1
+    case vendor = 2
+}
+
+enum DeviceRequestRequestTypeRecipient: UInt8 {
+    case device = 0
+    case interface = 1
+    case endpoint = 2
+    case other = 3
+}
+
+enum DeviceRequestRequestType {
+    case requestType(DeviceRequestRequestTypeDirection, DeviceRequestRequestTypeType, DeviceRequestRequestTypeRecipient)
+    var rawValue: UInt8 {
+        get {
+            switch self {
+            case let .requestType(d7, d6_5, d4_0):
+                return d7.rawValue << 7 | d6_5.rawValue << 5 | d4_0.rawValue
+            }
+        }
+    }
+}
+
+enum DeviceRequestParticularRequest: UInt8 {
+    case getDescriptor = 6
+}
+
+
 public class BBBUSBDevice: CustomStringConvertible {
     let service: io_service_t
     let device: USBDeviceInterface
@@ -43,6 +78,18 @@ public class BBBUSBDevice: CustomStringConvertible {
             return nil // `deinit` is not called
         }
         self.device = device
+        
+        
+        // DEBUG:
+//        var configDesc = IOUSBConfigurationDescriptor()
+//        let requestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device)
+//        let particularRequest = DeviceRequestParticularRequest.getDescriptor
+//        _ = withUnsafeMutablePointer(to: &configDesc) {
+//            device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue << 8), index: 0, length: 9, data: $0)
+//        }
+//        if configDesc.wTotalLength > 9 {
+//            
+//        }
     }
     
     deinit {

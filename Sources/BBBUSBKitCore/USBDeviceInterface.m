@@ -61,7 +61,7 @@
     (*_device)->USBGetSerialNumberStringIndex(_device, &_deviceDescriptor.iSerialNumber);
     (*_device)->GetNumberOfConfigurations(_device, &_deviceDescriptor.bNumConfigurations);
 #else
-    IOReturn err = [self deviceRequest:USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice) request:kUSBRqGetDescriptor value:kUSBDeviceDesc << 8 index:0 length:sizeof(_deviceDescriptor) data:&_deviceDescriptor];
+    IOReturn err = [self deviceRequestWithRequestType:USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice) request:kUSBRqGetDescriptor value:kUSBDeviceDesc << 8 index:0 length:sizeof(_deviceDescriptor) data:&_deviceDescriptor];
     if (err != kIOReturnSuccess) {
         // TODO:
     }
@@ -145,7 +145,7 @@
 /// MARK: - private
 
 /// Endpoint 0
-- (IOReturn)deviceRequest:(UInt8)bmRequestType request:(UInt8)bRequest value:(UInt16)wValue index:(UInt16)wIndex length:(UInt16)wLength data:(void *)pData {
+- (IOReturn)deviceRequestWithRequestType:(UInt8)bmRequestType request:(UInt8)bRequest value:(UInt16)wValue index:(UInt16)wIndex length:(UInt16)wLength data:(void *)pData {
     return [self deviceRequest:(IOUSBDevRequest){ bmRequestType, bRequest, wValue, wIndex, wLength, pData }];
 }
 
