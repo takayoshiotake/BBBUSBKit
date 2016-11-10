@@ -38,6 +38,10 @@ public struct USBConfigurationDescriptor {
     public let iConfiguration: UInt8
     public let bmAttributes: UInt8
     public let bMaxPower: UInt8
+    
+    public let configurationString: String?
+    
+    public let interfaces: [USBInterfaceDescriptor]
 }
 
 public struct USBInterfaceDescriptor {
@@ -50,5 +54,17 @@ public struct USBInterfaceDescriptor {
     public let bInterfaceSubClass: UInt8
     public let bInterfaceProtocol: UInt8
     public let iInterface: UInt8
+    
+    public let interfaceString: String?
+    
+    public let endpoints: [USBEndpointDescriptor]
 }
 
+public struct USBEndpointDescriptor {
+    public let bLength: UInt8
+    public let bDescriptorType: UInt8
+    public let bEndpointAddress: UInt8
+    public let bmAttributes: UInt8
+    public let wMaxPacketSize: UInt16
+    public let bInterval: UInt8
+}
