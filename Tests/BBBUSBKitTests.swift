@@ -50,7 +50,7 @@ class BBBUSBKitTests: XCTestCase {
         let idProduct = 0x003f as UInt16
         let um = BBBUSBManager()
         if let device = um.listDevices()?.filter({ $0.deviceDescriptor.idVendor == idVendor && $0.deviceDescriptor.idProduct == idProduct }).first {
-            XCTAssertEqual(device.deviceDescriptor.product, "Simple HID Device Demo")
+            XCTAssertEqual(device.deviceDescriptor.productString, "Simple HID Device Demo")
             
             do {
 //                try device.open()

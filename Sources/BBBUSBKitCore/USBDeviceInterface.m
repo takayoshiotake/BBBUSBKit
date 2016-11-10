@@ -12,9 +12,9 @@
 
 @property (assign, nonatomic, readwrite) IOUSBDeviceInterfaceLatest ** device;
 @property (assign, nonatomic, readwrite) IOUSBDeviceDescriptor deviceDescriptor;
-@property (strong, nonatomic, readwrite) NSString * deviceManufacturer;
-@property (strong, nonatomic, readwrite) NSString * deviceProduct;
-@property (strong, nonatomic, readwrite) NSString * deviceSerialNumber;
+@property (strong, nonatomic, readwrite) NSString * manufacturerString;
+@property (strong, nonatomic, readwrite) NSString * productString;
+@property (strong, nonatomic, readwrite) NSString * serialNumberString;
 
 @end
 
@@ -67,9 +67,9 @@
     }
 #endif
     // I faced that it is not possible to get the following values, with MacBook (Retina, 12-inch, Early 2016) and Anker Premium USB-C hub. However, it was possible to get the values (BUFFALO, USB3.0 Card Reader, 201006010301) with the USC-C hub.
-    _deviceManufacturer = [self getStringDescriptor:_deviceDescriptor.iManufacturer];
-    _deviceProduct = [self getStringDescriptor:_deviceDescriptor.iProduct];
-    _deviceSerialNumber = [self getStringDescriptor:_deviceDescriptor.iSerialNumber];
+    _manufacturerString = [self getStringDescriptor:_deviceDescriptor.iManufacturer];
+    _productString = [self getStringDescriptor:_deviceDescriptor.iProduct];
+    _serialNumberString = [self getStringDescriptor:_deviceDescriptor.iSerialNumber];
 }
 
 - (NSString *)getStringDescriptor:(UInt8)index {

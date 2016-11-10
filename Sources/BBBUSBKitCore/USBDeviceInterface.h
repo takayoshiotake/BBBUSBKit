@@ -14,9 +14,9 @@
 
 @property (assign, nonatomic, readonly) IOUSBDeviceInterfaceLatest ** device;
 @property (assign, nonatomic, readonly) IOUSBDeviceDescriptor deviceDescriptor;
-@property (strong, nonatomic, readonly) NSString * deviceManufacturer;
-@property (strong, nonatomic, readonly) NSString * deviceProduct;
-@property (strong, nonatomic, readonly) NSString * deviceSerialNumber;
+@property (strong, nonatomic, readonly) NSString * manufacturerString;
+@property (strong, nonatomic, readonly) NSString * productString;
+@property (strong, nonatomic, readonly) NSString * serialNumberString;
 
 - (instancetype)initWithDevice:(IOUSBDeviceInterfaceLatest **)device;
 
