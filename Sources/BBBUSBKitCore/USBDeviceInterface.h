@@ -13,10 +13,6 @@
 @interface USBDeviceInterface : NSObject
 
 @property (assign, nonatomic, readonly) IOUSBDeviceInterfaceLatest ** device;
-@property (assign, nonatomic, readonly) IOUSBDeviceDescriptor deviceDescriptor;
-@property (strong, nonatomic, readonly) NSString * manufacturerString;
-@property (strong, nonatomic, readonly) NSString * productString;
-@property (strong, nonatomic, readonly) NSString * serialNumberString;
 
 - (instancetype)initWithDevice:(IOUSBDeviceInterfaceLatest **)device;
 
@@ -27,5 +23,7 @@
 
 /// Control transfer on default pipe (endpoint0)
 - (IOReturn)deviceRequestWithRequestType:(UInt8)bmRequestType request:(UInt8)bRequest value:(UInt16)wValue index:(UInt16)wIndex length:(UInt16)wLength data:(void *)pData;
+
+- (NSString *)getStringDescriptorOfIndex:(UInt8)index error:(NSError **)error;
 
 @end
