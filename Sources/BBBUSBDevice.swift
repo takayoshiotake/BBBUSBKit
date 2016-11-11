@@ -81,15 +81,15 @@ public class BBBUSBDevice: CustomStringConvertible {
         
         
         // DEBUG:
-//        var configDesc = IOUSBConfigurationDescriptor()
-//        let requestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device)
-//        let particularRequest = DeviceRequestParticularRequest.getDescriptor
-//        _ = withUnsafeMutablePointer(to: &configDesc) {
-//            device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue << 8), index: 0, length: 9, data: $0)
-//        }
-//        if configDesc.wTotalLength > 9 {
-//            
-//        }
+        var configDesc = IOUSBConfigurationDescriptor()
+        let requestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device)
+        let particularRequest = DeviceRequestParticularRequest.getDescriptor
+        _ = withUnsafeMutablePointer(to: &configDesc) {
+            device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: 9, data: $0)
+        }
+        if configDesc.wTotalLength > 9 {
+            
+        }
     }
     
     deinit {
@@ -104,12 +104,10 @@ public class BBBUSBDevice: CustomStringConvertible {
     }
     
     public func getConfigurationDescriptor() throws -> USBConfigurationDescriptor {
-        let configurationDescriptor = try withBridgingIOReturnError {
-            try device.getConfigurationDescriptor()
+        let cd = try withBridgingIOReturnError {
+            try device.getConfigurationDescriptor().pointee
         }
-        return configurationDescriptor.withMemoryRebound(to: USBConfigurationDescriptor.self, capacity: 1) {
-            $0.pointee
-        }
+        return USBConfigurationDescriptor(bLength: cd.bLength, bDescriptorType: cd.bDescriptorType, wTotalLength: cd.wTotalLength, bNumInterfaces: cd.bNumInterfaces, bConfigurationValue: cd.bConfigurationValue, iConfiguration: cd.iConfiguration, bmAttributes: cd.bmAttributes, bMaxPower: cd.MaxPower, configurationString: nil, interfaces: [])
     }
     
     public func open() throws {
