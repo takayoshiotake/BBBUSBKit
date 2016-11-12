@@ -83,9 +83,8 @@
     return err;
 }
 
-/// MARK: - private
+/// MARK: - advanced
 
-/// Endpoint 0
 - (IOReturn)deviceRequestWithRequestType:(UInt8)bmRequestType request:(UInt8)bRequest value:(UInt16)wValue index:(UInt16)wIndex length:(UInt16)wLength data:(void *)pData {
     return [self deviceRequest:(IOUSBDevRequest){ bmRequestType, bRequest, wValue, wIndex, wLength, pData }];
 }
@@ -99,9 +98,16 @@
     return kIOReturnSuccess;
 }
 
+- (BOOL)deviceRequest:(IOUSBDevRequest *)request error:(NSError **)error {
+    IOReturn err = (*_device)->DeviceRequest(_device, request);
+    if (err != kIOReturnSuccess) {
+        *error = [NSError BBBUSBKitErrorWithIOReturnError:err];
+        return false;
+    }
+    return true;
+}
+
 - (NSString *)getStringDescriptorOfIndex:(UInt8)index error:(NSError **)error {
-    IOReturn err;
-    
     UInt8 temp[2];
     IOUSBDevRequest request;
     request.bmRequestType = USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice);
@@ -110,17 +116,15 @@
     request.wIndex = 0;
     request.wLength = 2;
     request.pData = &temp;
-    if ((err = [self deviceRequest:request]) != kIOReturnSuccess) {
-        *error = [NSError BBBUSBKitErrorWithIOReturnError: err];
-        return nil;
+    if (![self deviceRequest:&request error:error]) {
+        return false;
     }
     
     UInt8 string[temp[0]];
     request.wLength = temp[0];
     request.pData = &string;
-    if ((err = [self deviceRequest:request]) != kIOReturnSuccess) {
-        *error = [NSError BBBUSBKitErrorWithIOReturnError: err];
-        return nil;
+    if (![self deviceRequest:&request error:error]) {
+        return false;
     }
     
     return [[NSString alloc] initWithBytes:&string[2] length:string[0] - 2 encoding:NSUTF16LittleEndianStringEncoding];
