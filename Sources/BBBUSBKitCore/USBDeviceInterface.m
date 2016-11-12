@@ -91,7 +91,12 @@
 }
 
 - (IOReturn)deviceRequest:(IOUSBDevRequest)request {
-    return (*_device)->DeviceRequest(_device, &request);
+    IOReturn err = (*_device)->DeviceRequest(_device, &request);
+    if (err != kIOReturnSuccess) {
+        return err;
+    }
+    // TODO: compare request.wLength and request.wLenDone
+    return kIOReturnSuccess;
 }
 
 - (NSString *)getStringDescriptorOfIndex:(UInt8)index error:(NSError **)error {

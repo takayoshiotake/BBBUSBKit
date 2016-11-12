@@ -82,15 +82,37 @@ public class BBBUSBDevice: CustomStringConvertible {
         self.device = device
         
         var devDesc = IOUSBDeviceDescriptor()
+        // TODO: check the return value: IOReturn
         _ = withUnsafeMutablePointer(to: &devDesc) {
             device.deviceRequest(withRequestType: DeviceRequestRequestType.requestType(.toHost, .standard, .device).rawValue, request: DeviceRequestParticularRequest.getDescriptor.rawValue, value: UInt16(USBDescriptorType.device.rawValue) << 8, index: 0, length: 18, data: $0)
         }
         do {
             deviceDescriptor = try withBridgingIOReturnError {
-                let manufacturerString = devDesc.iManufacturer != 0 ? try device.getStringDescriptor(of: devDesc.iManufacturer) : nil
-                let productString = devDesc.iProduct != 0 ? try device.getStringDescriptor(of: devDesc.iProduct) : nil
-                let serialNumberString = devDesc.iSerialNumber != 0 ? try device.getStringDescriptor(of: devDesc.iSerialNumber) : nil
-                return USBDeviceDescriptor(bLength: devDesc.bLength, bDescriptorType: devDesc.bDescriptorType, bcdUSB: devDesc.bcdUSB, bDeviceClass: devDesc.bDeviceClass, bDeviceSubClass: devDesc.bDeviceSubClass, bDeviceProtocol: devDesc.bDeviceProtocol, bMaxPacketSize0: devDesc.bMaxPacketSize0, idVendor: devDesc.idVendor, idProduct: devDesc.idProduct, bcdDevice: devDesc.bcdDevice, iManufacturer: devDesc.iManufacturer, iProduct: devDesc.iProduct, iSerialNumber: devDesc.iSerialNumber, bNumConfigurations: devDesc.bNumConfigurations, manufacturerString: manufacturerString, productString: productString, serialNumberString: serialNumberString)
+                var result = USBDeviceDescriptor()
+                result.bLength = devDesc.bLength
+                result.bDescriptorType = devDesc.bDescriptorType
+                result.bcdUSB = devDesc.bcdUSB
+                result.bDeviceClass = devDesc.bDeviceClass
+                result.bDeviceSubClass = devDesc.bDeviceSubClass
+                result.bDeviceProtocol = devDesc.bDeviceProtocol
+                result.bMaxPacketSize0 = devDesc.bMaxPacketSize0
+                result.idVendor = devDesc.idVendor
+                result.idProduct = devDesc.idProduct
+                result.bcdDevice = devDesc.bcdDevice
+                result.iManufacturer = devDesc.iManufacturer
+                result.iProduct = devDesc.iProduct
+                result.iSerialNumber = devDesc.iSerialNumber
+                result.bNumConfigurations = devDesc.bNumConfigurations
+                if result.iManufacturer != 0 {
+                    result.manufacturerString = try device.getStringDescriptor(of: result.iManufacturer)
+                }
+                if result.iProduct != 0 {
+                    result.productString = try device.getStringDescriptor(of: result.iProduct)
+                }
+                if result.iSerialNumber != 0 {
+                    result.serialNumberString = try device.getStringDescriptor(of: result.iSerialNumber)
+                }
+                return result
             }
         }
         catch {
@@ -102,11 +124,17 @@ public class BBBUSBDevice: CustomStringConvertible {
         var configDesc = IOUSBConfigurationDescriptor()
         let requestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device)
         let particularRequest = DeviceRequestParticularRequest.getDescriptor
+        // TODO: check the return value: IOReturn
         _ = withUnsafeMutablePointer(to: &configDesc) {
             device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: 9, data: $0)
         }
         if configDesc.wTotalLength > 9 {
-            // TODO:
+            var configDescBytes = [UInt8](repeating: 0, count: Int(configDesc.wTotalLength))
+            // TODO: check the return value: IOReturn
+            _ = withUnsafeMutablePointer(to: &configDescBytes) {
+                device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: configDesc.wTotalLength, data: $0)
+            }
+            // TODO: parse interfaceDescriptor, endpointDescriptor
         }
     }
     
@@ -115,10 +143,11 @@ public class BBBUSBDevice: CustomStringConvertible {
     }
     
     public func getConfigurationDescriptor() throws -> USBConfigurationDescriptor {
-        let cd = try withBridgingIOReturnError {
+        _ = try withBridgingIOReturnError {
             try device.getConfigurationDescriptor().pointee
         }
-        return USBConfigurationDescriptor(bLength: cd.bLength, bDescriptorType: cd.bDescriptorType, wTotalLength: cd.wTotalLength, bNumInterfaces: cd.bNumInterfaces, bConfigurationValue: cd.bConfigurationValue, iConfiguration: cd.iConfiguration, bmAttributes: cd.bmAttributes, bMaxPower: cd.MaxPower, configurationString: nil, interfaces: [])
+        // TODO:
+        return USBConfigurationDescriptor()
     }
     
     public func open() throws {

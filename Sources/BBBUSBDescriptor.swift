@@ -9,64 +9,74 @@
 import Cocoa
 
 public struct USBDeviceDescriptor {
-    public let bLength: UInt8
-    public let bDescriptorType: UInt8
-    public let bcdUSB: UInt16
-    public let bDeviceClass: UInt8
-    public let bDeviceSubClass: UInt8
-    public let bDeviceProtocol: UInt8
-    public let bMaxPacketSize0: UInt8
-    public let idVendor: UInt16
-    public let idProduct: UInt16
-    public let bcdDevice: UInt16
-    public let iManufacturer: UInt8
-    public let iProduct: UInt8
-    public let iSerialNumber: UInt8
-    public let bNumConfigurations: UInt8
+    public var bLength: UInt8 = 0
+    public var bDescriptorType: UInt8 = 0
+    public var bcdUSB: UInt16 = 0
+    public var bDeviceClass: UInt8 = 0
+    public var bDeviceSubClass: UInt8 = 0
+    public var bDeviceProtocol: UInt8 = 0
+    public var bMaxPacketSize0: UInt8 = 0
+    public var idVendor: UInt16 = 0
+    public var idProduct: UInt16 = 0
+    public var bcdDevice: UInt16 = 0
+    public var iManufacturer: UInt8 = 0
+    public var iProduct: UInt8 = 0
+    public var iSerialNumber: UInt8 = 0
+    public var bNumConfigurations: UInt8 = 0
     
-    public let manufacturerString: String?
-    public let productString: String?
-    public let serialNumberString: String?
+    public var manufacturerString: String? = nil
+    public var productString: String? = nil
+    public var serialNumberString: String? = nil
+    
+    init() {
+    }
 }
 
 public struct USBConfigurationDescriptor {
-    public let bLength: UInt8
-    public let bDescriptorType: UInt8
-    public let wTotalLength: UInt16
-    public let bNumInterfaces: UInt8
-    public let bConfigurationValue: UInt8
-    public let iConfiguration: UInt8
-    public let bmAttributes: UInt8
-    public let bMaxPower: UInt8
+    public var bLength: UInt8 = 0
+    public var bDescriptorType: UInt8 = 0
+    public var wTotalLength: UInt16 = 0
+    public var bNumInterfaces: UInt8 = 0
+    public var bConfigurationValue: UInt8 = 0
+    public var iConfiguration: UInt8 = 0
+    public var bmAttributes: UInt8 = 0
+    public var bMaxPower: UInt8 = 0
     
-    public let configurationString: String?
+    public var configurationString: String? = nil
+    public var interfaces: [USBInterfaceDescriptor] = []
     
-    public let interfaces: [USBInterfaceDescriptor]
+    init() {
+    }
 }
 
 public struct USBInterfaceDescriptor {
-    public let bLength: UInt8
-    public let bDescriptorType: UInt8
-    public let bInterfaceNumber: UInt8
-    public let bAlternateSetting: UInt8
-    public let bNumEndpoints: UInt8
-    public let bInterfaceClass: UInt8
-    public let bInterfaceSubClass: UInt8
-    public let bInterfaceProtocol: UInt8
-    public let iInterface: UInt8
+    public var bLength: UInt8 = 0
+    public var bDescriptorType: UInt8 = 0
+    public var bInterfaceNumber: UInt8 = 0
+    public var bAlternateSetting: UInt8 = 0
+    public var bNumEndpoints: UInt8 = 0
+    public var bInterfaceClass: UInt8 = 0
+    public var bInterfaceSubClass: UInt8 = 0
+    public var bInterfaceProtocol: UInt8 = 0
+    public var iInterface: UInt8 = 0
     
-    public let interfaceString: String?
+    public var interfaceString: String? = nil
+    public var endpoints: [USBEndpointDescriptor] = []
     
-    public let endpoints: [USBEndpointDescriptor]
+    init() {
+    }
 }
 
 public struct USBEndpointDescriptor {
-    public let bLength: UInt8
-    public let bDescriptorType: UInt8
-    public let bEndpointAddress: UInt8
-    public let bmAttributes: UInt8
-    public let wMaxPacketSize: UInt16
-    public let bInterval: UInt8
+    public var bLength: UInt8 = 0
+    public var bDescriptorType: UInt8 = 0
+    public var bEndpointAddress: UInt8 = 0
+    public var bmAttributes: UInt8 = 0
+    public var wMaxPacketSize: UInt16 = 0
+    public var bInterval: UInt8 = 0
+    
+    init() {
+    }
 }
 
 public enum USBDescriptorType : UInt8 {

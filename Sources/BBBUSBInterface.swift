@@ -31,8 +31,8 @@ public class BBBUSBInterface {
     
     public var interfaceDescriptor: USBInterfaceDescriptor {
         get {
-            let desc = interface.interfaceDescriptor
-            return USBInterfaceDescriptor(bLength: desc.bLength, bDescriptorType: desc.bDescriptorType, bInterfaceNumber: desc.bInterfaceNumber, bAlternateSetting: desc.bAlternateSetting, bNumEndpoints: desc.bNumEndpoints, bInterfaceClass: desc.bInterfaceClass, bInterfaceSubClass: desc.bInterfaceSubClass, bInterfaceProtocol: desc.bInterfaceProtocol, iInterface: desc.iInterface, interfaceString: nil, endpoints: [])
+            // TODO:
+            return USBInterfaceDescriptor()
         }
     }
 }
