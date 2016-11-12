@@ -31,12 +31,8 @@ public class BBBUSBInterface {
     
     public var interfaceDescriptor: USBInterfaceDescriptor {
         get {
-            var interfaceDescriptor = interface.interfaceDescriptor
-            return withUnsafePointer(to: &interfaceDescriptor) {
-                $0.withMemoryRebound(to: USBInterfaceDescriptor.self, capacity: 1) {
-                    $0.pointee
-                }
-            }
+            let desc = interface.interfaceDescriptor
+            return USBInterfaceDescriptor(bLength: desc.bLength, bDescriptorType: desc.bDescriptorType, bInterfaceNumber: desc.bInterfaceNumber, bAlternateSetting: desc.bAlternateSetting, bNumEndpoints: desc.bNumEndpoints, bInterfaceClass: desc.bInterfaceClass, bInterfaceSubClass: desc.bInterfaceSubClass, bInterfaceProtocol: desc.bInterfaceProtocol, iInterface: desc.iInterface, interfaceString: nil, endpoints: [])
         }
     }
 }

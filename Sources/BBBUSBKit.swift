@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BBBUSBKitPrivate
 
 #if false // because "Swift Compiler Error" has occured
     extension io_iterator_t: Sequence {
@@ -43,5 +44,14 @@ class IOServiceGenerator: IteratorProtocol {
             return nil
         }
         return service
+    }
+}
+
+func withBridgingIOReturnError<T>(block: () throws -> T) throws -> T {
+    do {
+        return try block()
+    }
+    catch let error as NSError where error.domain == kBBBUSBKitIOReturnErrorDomain {
+        throw BBBUSBDeviceError.IOReturnError(err: error.code)
     }
 }
