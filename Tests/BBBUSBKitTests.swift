@@ -17,7 +17,7 @@ class BBBUSBKitTests: XCTestCase {
             for device in devices {
                 do {
                     let deviceDescriptor = device.deviceDescriptor
-                    let configurationDescriptor = try device.getConfigurationDescriptor()
+                    let configurationDescriptor = try device.configurationDescriptor
                     
                     print("deviceDescriptor=\(deviceDescriptor)")
                     print("configurationDescriptor=\(configurationDescriptor)")

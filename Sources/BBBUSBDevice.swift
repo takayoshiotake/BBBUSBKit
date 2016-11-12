@@ -55,6 +55,7 @@ public class BBBUSBDevice: CustomStringConvertible {
     public let path: String
     
     public var deviceDescriptor: USBDeviceDescriptor
+    public var configurationDescriptor: USBConfigurationDescriptor
     
     init?(service: io_service_t) {
         self.service = service
@@ -122,33 +123,41 @@ public class BBBUSBDevice: CustomStringConvertible {
         
         // DEBUG:
         var configDesc = IOUSBConfigurationDescriptor()
-        let requestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device)
-        let particularRequest = DeviceRequestParticularRequest.getDescriptor
-        // TODO: check the return value: IOReturn
-        _ = withUnsafeMutablePointer(to: &configDesc) {
-            device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: 9, data: $0)
-        }
-        if configDesc.wTotalLength > 9 {
-            var configDescBytes = [UInt8](repeating: 0, count: Int(configDesc.wTotalLength))
+        do {
+            let requestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device)
+            let particularRequest = DeviceRequestParticularRequest.getDescriptor
             // TODO: check the return value: IOReturn
-            _ = withUnsafeMutablePointer(to: &configDescBytes) {
-                device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: configDesc.wTotalLength, data: $0)
+            _ = withUnsafeMutablePointer(to: &configDesc) {
+                device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: 9, data: $0)
             }
-            // TODO: parse interfaceDescriptor, endpointDescriptor
+            if configDesc.wTotalLength > 9 {
+                var configDescBytes = [UInt8](repeating: 0, count: Int(configDesc.wTotalLength))
+                // TODO: check the return value: IOReturn
+                _ = withUnsafeMutablePointer(to: &configDescBytes[0]) {
+                    device.deviceRequest(withRequestType: requestType.rawValue, request: particularRequest.rawValue, value: UInt16(USBDescriptorType.configuration.rawValue) << 8, index: 0, length: configDesc.wTotalLength, data: $0)
+                }
+                // TODO: parse interfaceDescriptor, endpointDescriptor
+            }
+        }
+        configurationDescriptor = USBConfigurationDescriptor()
+        configurationDescriptor.bLength = configDesc.bLength
+        configurationDescriptor.bDescriptorType = configDesc.bDescriptorType
+        configurationDescriptor.wTotalLength = configDesc.wTotalLength
+        configurationDescriptor.bNumInterfaces = configDesc.bNumInterfaces
+        configurationDescriptor.bConfigurationValue = configDesc.bConfigurationValue
+        configurationDescriptor.iConfiguration = configDesc.iConfiguration
+        configurationDescriptor.bmAttributes = configDesc.bmAttributes
+        configurationDescriptor.bMaxPower = configDesc.MaxPower
+        if configurationDescriptor.iConfiguration != 0 {
+            // TODO:
+            configurationDescriptor.configurationString = try? device.getStringDescriptor(of: configurationDescriptor.iConfiguration)
         }
     }
     
     deinit {
         IOObjectRelease(service)
     }
-    
-    public func getConfigurationDescriptor() throws -> USBConfigurationDescriptor {
-        _ = try withBridgingIOReturnError {
-            try device.getConfigurationDescriptor().pointee
-        }
-        // TODO:
-        return USBConfigurationDescriptor()
-    }
+
     
     public func open() throws {
         let err = device.open()
