@@ -87,9 +87,9 @@ public class BBBUSBDevice: CustomStringConvertible {
         }
         do {
             deviceDescriptor = try withBridgingIOReturnError {
-                let manufacturerString: String? = try device.getStringDescriptor(of: devDesc.iManufacturer)
-                let productString: String? = try device.getStringDescriptor(of: devDesc.iProduct)
-                let serialNumberString: String? = try device.getStringDescriptor(of: devDesc.iSerialNumber)
+                let manufacturerString = devDesc.iManufacturer != 0 ? try device.getStringDescriptor(of: devDesc.iManufacturer) : nil
+                let productString = devDesc.iProduct != 0 ? try device.getStringDescriptor(of: devDesc.iProduct) : nil
+                let serialNumberString = devDesc.iSerialNumber != 0 ? try device.getStringDescriptor(of: devDesc.iSerialNumber) : nil
                 return USBDeviceDescriptor(bLength: devDesc.bLength, bDescriptorType: devDesc.bDescriptorType, bcdUSB: devDesc.bcdUSB, bDeviceClass: devDesc.bDeviceClass, bDeviceSubClass: devDesc.bDeviceSubClass, bDeviceProtocol: devDesc.bDeviceProtocol, bMaxPacketSize0: devDesc.bMaxPacketSize0, idVendor: devDesc.idVendor, idProduct: devDesc.idProduct, bcdDevice: devDesc.bcdDevice, iManufacturer: devDesc.iManufacturer, iProduct: devDesc.iProduct, iSerialNumber: devDesc.iSerialNumber, bNumConfigurations: devDesc.bNumConfigurations, manufacturerString: manufacturerString, productString: productString, serialNumberString: serialNumberString)
             }
         }
