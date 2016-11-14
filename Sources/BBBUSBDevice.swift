@@ -143,16 +143,60 @@ public class BBBUSBDevice: CustomStringConvertible {
                 result.bmAttributes = configDesc.bmAttributes
                 result.bMaxPower = configDesc.MaxPower
                 if result.iConfiguration != 0 {
-                    // TODO:
                     result.configurationString = try device.getStringDescriptor(of: result.iConfiguration)
                 }
                 
                 if configDesc.wTotalLength > 9 {
-                    // TODO: parse interfaceDescriptor, endpointDescriptor
+                    // Get interfaceDescriptor, endpointDescriptor
                     var configDescBytes = [UInt8](repeating: 0, count: Int(configDesc.wTotalLength))
                     request.wLength = configDesc.wTotalLength
                     request.pData = UnsafeMutableRawPointer(&configDescBytes[0])
                     try device.deviceRequest(&request)
+                    
+                    var ptr = withUnsafePointer(to: &configDescBytes[9]) { $0 }
+                    var available = configDesc.wTotalLength - 9
+                    for _ in 0..<configDesc.bNumInterfaces {
+                        guard ptr[0] == 9 && ptr[1] == USBDescriptorType.interface.rawValue && available >= 9 else {
+                            // FIXME:
+                            return result
+                        }
+                        var ifDesc = USBInterfaceDescriptor()
+                        ifDesc.bLength = ptr[0]
+                        ifDesc.bDescriptorType = ptr[1]
+                        ifDesc.bInterfaceNumber = ptr[2]
+                        ifDesc.bAlternateSetting = ptr[3]
+                        ifDesc.bNumEndpoints = ptr[4]
+                        ifDesc.bInterfaceClass = ptr[5]
+                        ifDesc.bInterfaceSubClass = ptr[6]
+                        ifDesc.bInterfaceProtocol = ptr[7]
+                        ifDesc.iInterface = ptr[8]
+                        ptr = ptr.advanced(by: 9)
+                        available -= 9
+                        
+                        for _ in 0..<ifDesc.bNumEndpoints {
+                            guard ptr[0] == 7 && ptr[1] == USBDescriptorType.endpoint.rawValue && available >= 7 else {
+                                // FIXME:
+                                return result
+                            }
+                            var epDesc = USBEndpointDescriptor()
+                            epDesc.bLength = ptr[0]
+                            epDesc.bDescriptorType = ptr[1]
+                            epDesc.bEndpointAddress = ptr[2]
+                            epDesc.bmAttributes = ptr[3]
+                            epDesc.wMaxPacketSize = UInt16(ptr[4]) | UInt16(ptr[5]) << 8
+                            epDesc.bInterval = ptr[6]
+                            ptr = ptr.advanced(by: 7)
+                            available -= 7
+                            
+                            ifDesc.endpoints.append(epDesc)
+                        }
+                        
+                        result.interfaces.append(ifDesc)
+                    }
+                    
+                    if available != 0 {
+                        // TODO: error
+                    }
                 }
                 
                 return result
