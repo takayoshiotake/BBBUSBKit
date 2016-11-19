@@ -29,10 +29,10 @@ public class BBBUSBInterface {
         IOObjectRelease(service)
     }
     
-    public var interfaceDescriptor: USBInterfaceDescriptor {
+    public var interfaceDescriptor: BBBUSBInterfaceDescriptor {
         get {
             // TODO:
-            return USBInterfaceDescriptor()
+            return BBBUSBInterfaceDescriptor()
         }
     }
 }

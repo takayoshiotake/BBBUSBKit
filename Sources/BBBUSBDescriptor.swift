@@ -8,7 +8,7 @@
 
 import Cocoa
 
-public struct USBDeviceDescriptor {
+public struct BBBUSBDeviceDescriptor {
     public var bLength: UInt8 = 0
     public var bDescriptorType: UInt8 = 0
     public var bcdUSB: UInt16 = 0
@@ -32,7 +32,7 @@ public struct USBDeviceDescriptor {
     }
 }
 
-public struct USBConfigurationDescriptor {
+public struct BBBUSBConfigurationDescriptor {
     public var bLength: UInt8 = 0
     public var bDescriptorType: UInt8 = 0
     public var wTotalLength: UInt16 = 0
@@ -43,13 +43,13 @@ public struct USBConfigurationDescriptor {
     public var bMaxPower: UInt8 = 0
     
     public var configurationString: String? = nil
-    public var interfaces: [USBInterfaceDescriptor] = []
+    public var interfaces: [BBBUSBInterfaceDescriptor] = []
     
     init() {
     }
 }
 
-public struct USBInterfaceDescriptor {
+public struct BBBUSBInterfaceDescriptor {
     public var bLength: UInt8 = 0
     public var bDescriptorType: UInt8 = 0
     public var bInterfaceNumber: UInt8 = 0
@@ -61,13 +61,13 @@ public struct USBInterfaceDescriptor {
     public var iInterface: UInt8 = 0
     
     public var interfaceString: String? = nil
-    public var endpoints: [USBEndpointDescriptor] = []
+    public var endpoints: [BBBUSBEndpointDescriptor] = []
     
     init() {
     }
 }
 
-public struct USBEndpointDescriptor {
+public struct BBBUSBEndpointDescriptor {
     public var bLength: UInt8 = 0
     public var bDescriptorType: UInt8 = 0
     public var bEndpointAddress: UInt8 = 0
@@ -77,15 +77,4 @@ public struct USBEndpointDescriptor {
     
     init() {
     }
-}
-
-public enum USBDescriptorType : UInt8 {
-    case device = 1
-    case configuration = 2
-    case string = 3
-    case interface = 4
-    case endpoint = 5
-    case deviceQualifier = 6
-    case otherSpeedConfiguration = 7
-    case interfacePower = 8
 }

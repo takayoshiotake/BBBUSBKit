@@ -13,6 +13,17 @@ public enum BBBUSBDeviceError: Error {
     case IOReturnError(err: Int)
 }
 
+enum USBDescriptorType : UInt8 {
+    case device = 1
+    case configuration = 2
+    case string = 3
+    case interface = 4
+    case endpoint = 5
+    case deviceQualifier = 6
+    case otherSpeedConfiguration = 7
+    case interfacePower = 8
+}
+
 enum DeviceRequestRequestTypeDirection: UInt8 {
     case toDevice = 0
     case toHost = 1
@@ -54,8 +65,8 @@ public class BBBUSBDevice: CustomStringConvertible {
     public let name: String
     public let path: String
     
-    public var deviceDescriptor: USBDeviceDescriptor
-    public var configurationDescriptor: USBConfigurationDescriptor
+    public var deviceDescriptor: BBBUSBDeviceDescriptor
+    public var configurationDescriptor: BBBUSBConfigurationDescriptor
     
     init?(service: io_service_t) {
         self.service = service
@@ -94,7 +105,7 @@ public class BBBUSBDevice: CustomStringConvertible {
                 request.pData = UnsafeMutableRawPointer(&devDesc)
                 try device.deviceRequest(&request)
                 
-                var result = USBDeviceDescriptor()
+                var result = BBBUSBDeviceDescriptor()
                 result.bLength = devDesc.bLength
                 result.bDescriptorType = devDesc.bDescriptorType
                 result.bcdUSB = devDesc.bcdUSB
@@ -133,7 +144,7 @@ public class BBBUSBDevice: CustomStringConvertible {
                 request.pData = UnsafeMutableRawPointer(&configDesc)
                 try device.deviceRequest(&request)
                 
-                var result = USBConfigurationDescriptor()
+                var result = BBBUSBConfigurationDescriptor()
                 result.bLength = configDesc.bLength
                 result.bDescriptorType = configDesc.bDescriptorType
                 result.wTotalLength = configDesc.wTotalLength
@@ -160,7 +171,7 @@ public class BBBUSBDevice: CustomStringConvertible {
                             // FIXME:
                             return result
                         }
-                        var ifDesc = USBInterfaceDescriptor()
+                        var ifDesc = BBBUSBInterfaceDescriptor()
                         ifDesc.bLength = ptr[0]
                         ifDesc.bDescriptorType = ptr[1]
                         ifDesc.bInterfaceNumber = ptr[2]
@@ -178,7 +189,7 @@ public class BBBUSBDevice: CustomStringConvertible {
                                 // FIXME:
                                 return result
                             }
-                            var epDesc = USBEndpointDescriptor()
+                            var epDesc = BBBUSBEndpointDescriptor()
                             epDesc.bLength = ptr[0]
                             epDesc.bDescriptorType = ptr[1]
                             epDesc.bEndpointAddress = ptr[2]
