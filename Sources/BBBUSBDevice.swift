@@ -66,7 +66,7 @@ public class BBBUSBDevice: CustomStringConvertible {
     public let name: String
     public let path: String
     
-    public var deviceDescriptor: BBBUSBDeviceDescriptor
+    public var descriptor: BBBUSBDeviceDescriptor
     public var configurationDescriptor: BBBUSBConfigurationDescriptor
     
     init?(service: io_service_t) {
@@ -95,7 +95,7 @@ public class BBBUSBDevice: CustomStringConvertible {
         self.device = device
         
         do {
-            deviceDescriptor = try withBridgingIOReturnError {
+            descriptor = try withBridgingIOReturnError {
                 var rawDevDesc = IOUSBDeviceDescriptor()
                 var request = IOUSBDevRequest()
                 request.bmRequestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device).rawValue
@@ -250,17 +250,20 @@ public class BBBUSBDevice: CustomStringConvertible {
         }
         
         var interfaces: [BBBUSBInterface] = []
+        var interfaceCount = 0
         for service in IOServiceSequence(iterator) {
-            if let interface = BBBUSBInterface(service: service, device: self) { // move service
+            let ifDesc = configurationDescriptor.interfaces[interfaceCount] // without range check
+            if let interface = BBBUSBInterface(service: service, device: self, descriptor: ifDesc) { // move service
                 interfaces.append(interface)
             }
+            interfaceCount += 1
         }
         return interfaces
     }
     
     public var description: String {
         get {
-            return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", deviceDescriptor.idVendor, deviceDescriptor.idProduct)
+            return String(format: "BBBUSBKit.BBBUSBDevice = { name=\"\(name)\", path=\"\(path)\", vendorID=0x%04x, productID=0x%04x }", descriptor.idVendor, descriptor.idProduct)
         }
     }
 }

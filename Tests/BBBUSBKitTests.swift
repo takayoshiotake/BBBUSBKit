@@ -15,15 +15,8 @@ class BBBUSBKitTests: XCTestCase {
         let um = BBBUSBManager()
         if let devices = um.listDevices() {
             for device in devices {
-                do {
-                    let deviceDescriptor = device.deviceDescriptor
-                    let configurationDescriptor = try device.configurationDescriptor
-                    
-                    print("deviceDescriptor=\(deviceDescriptor)")
-                    print("configurationDescriptor=\(configurationDescriptor)")
-                }
-                catch {
-                }
+                print("deviceDescriptor=\(device.descriptor)")
+                print("configurationDescriptor=\(device.configurationDescriptor)")
             }
         }
     }
@@ -33,7 +26,6 @@ class BBBUSBKitTests: XCTestCase {
         if let device = um.listDevices()?.first {
             do {
                 try device.open()
-                try device.listInterfaces()
             }
             catch BBBUSBDeviceError.IOReturnError(let err) {
                 print(String(format: "err=0x%08x", err))
@@ -49,20 +41,14 @@ class BBBUSBKitTests: XCTestCase {
         let idVendor = 0x04d8 as UInt16
         let idProduct = 0x003f as UInt16
         let um = BBBUSBManager()
-        if let device = um.listDevices()?.filter({ $0.deviceDescriptor.idVendor == idVendor && $0.deviceDescriptor.idProduct == idProduct }).first {
-            XCTAssertEqual(device.deviceDescriptor.productString, "Simple HID Device Demo")
+        if let device = um.listDevices()?.filter({ $0.descriptor.idVendor == idVendor && $0.descriptor.idProduct == idProduct }).first {
+            XCTAssertEqual(device.descriptor.productString, "Simple HID Device Demo")
             
             do {
 //                try device.open()
                 let interfaces = try device.listInterfaces()
                 for interface in interfaces {
-                    do {
-                        let interfaceDescriptor = interface.interfaceDescriptor
-                        
-                        print("interfaceDescriptor=\(interfaceDescriptor)")
-                    }
-                    catch {
-                    }
+                    print("interfaceDescriptor=\(interface.descriptor)")
                 }
             }
             catch {

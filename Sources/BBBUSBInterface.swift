@@ -10,11 +10,13 @@ import Foundation
 import BBBUSBKitPrivate
 
 public class BBBUSBInterface {
+    public let descriptor: BBBUSBInterfaceDescriptor
+    
     let service: io_service_t
     let interface: USBInterfaceInterface
     weak var device: BBBUSBDevice!
     
-    init?(service: io_service_t, device: BBBUSBDevice) {
+    init?(service: io_service_t, device: BBBUSBDevice, descriptor: BBBUSBInterfaceDescriptor) {
         self.service = service
 
         guard let plugInInterface = USBPlugInInterface(service: service, plugInType: .interface), let interface = plugInInterface.queryUSBInterfaceInterface(device.device) else {
@@ -23,16 +25,10 @@ public class BBBUSBInterface {
         }
         self.interface = interface
         self.device = device
+        self.descriptor = descriptor
     }
     
     deinit {
         IOObjectRelease(service)
-    }
-    
-    public var interfaceDescriptor: BBBUSBInterfaceDescriptor {
-        get {
-            // TODO:
-            return BBBUSBInterfaceDescriptor()
-        }
     }
 }
