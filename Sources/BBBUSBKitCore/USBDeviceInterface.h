@@ -28,6 +28,6 @@
 ///
 /// the `request.wLenData` will be updated of after requested
 - (BOOL)deviceRequest:(IOUSBDevRequest *)request error:(NSError **)error;
-- (NSString *)getStringDescriptorOfIndex:(UInt8)index error:(NSError **)error;
+- (NSString *)getStringDescriptorAtIndex:(UInt8)index error:(NSError **)error;
 
 @end

@@ -11,6 +11,7 @@ import BBBUSBKitPrivate
 
 public enum BBBUSBDeviceError: Error {
     case IOReturnError(err: Int)
+    case illegalDescriptor
 }
 
 enum USBDescriptorType : UInt8 {
@@ -95,66 +96,65 @@ public class BBBUSBDevice: CustomStringConvertible {
         
         do {
             deviceDescriptor = try withBridgingIOReturnError {
-                var devDesc = IOUSBDeviceDescriptor()
+                var rawDevDesc = IOUSBDeviceDescriptor()
                 var request = IOUSBDevRequest()
                 request.bmRequestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device).rawValue
                 request.bRequest = DeviceRequestParticularRequest.getDescriptor.rawValue
                 request.wValue = UInt16(USBDescriptorType.device.rawValue) << 8
                 request.wIndex = 0
                 request.wLength = 18
-                request.pData = UnsafeMutableRawPointer(&devDesc)
+                request.pData = UnsafeMutableRawPointer(&rawDevDesc)
                 try device.deviceRequest(&request)
                 
-                var result = BBBUSBDeviceDescriptor()
-                result.bLength = devDesc.bLength
-                result.bDescriptorType = devDesc.bDescriptorType
-                result.bcdUSB = devDesc.bcdUSB
-                result.bDeviceClass = devDesc.bDeviceClass
-                result.bDeviceSubClass = devDesc.bDeviceSubClass
-                result.bDeviceProtocol = devDesc.bDeviceProtocol
-                result.bMaxPacketSize0 = devDesc.bMaxPacketSize0
-                result.idVendor = devDesc.idVendor
-                result.idProduct = devDesc.idProduct
-                result.bcdDevice = devDesc.bcdDevice
-                result.iManufacturer = devDesc.iManufacturer
-                result.iProduct = devDesc.iProduct
-                result.iSerialNumber = devDesc.iSerialNumber
-                result.bNumConfigurations = devDesc.bNumConfigurations
-                if result.iManufacturer != 0 {
-                    result.manufacturerString = try device.getStringDescriptor(of: result.iManufacturer)
+                var devDesc = BBBUSBDeviceDescriptor()
+                devDesc.bLength = rawDevDesc.bLength
+                devDesc.bDescriptorType = rawDevDesc.bDescriptorType
+                devDesc.bcdUSB = rawDevDesc.bcdUSB
+                devDesc.bDeviceClass = rawDevDesc.bDeviceClass
+                devDesc.bDeviceSubClass = rawDevDesc.bDeviceSubClass
+                devDesc.bDeviceProtocol = rawDevDesc.bDeviceProtocol
+                devDesc.bMaxPacketSize0 = rawDevDesc.bMaxPacketSize0
+                devDesc.idVendor = rawDevDesc.idVendor
+                devDesc.idProduct = rawDevDesc.idProduct
+                devDesc.bcdDevice = rawDevDesc.bcdDevice
+                devDesc.iManufacturer = rawDevDesc.iManufacturer
+                devDesc.iProduct = rawDevDesc.iProduct
+                devDesc.iSerialNumber = rawDevDesc.iSerialNumber
+                devDesc.bNumConfigurations = rawDevDesc.bNumConfigurations
+                if devDesc.iManufacturer != 0 {
+                    devDesc.manufacturerString = try device.getStringDescriptor(at: devDesc.iManufacturer)
                 }
-                if result.iProduct != 0 {
-                    result.productString = try device.getStringDescriptor(of: result.iProduct)
+                if devDesc.iProduct != 0 {
+                    devDesc.productString = try device.getStringDescriptor(at: devDesc.iProduct)
                 }
-                if result.iSerialNumber != 0 {
-                    result.serialNumberString = try device.getStringDescriptor(of: result.iSerialNumber)
+                if devDesc.iSerialNumber != 0 {
+                    devDesc.serialNumberString = try device.getStringDescriptor(at: devDesc.iSerialNumber)
                 }
-                return result
+                return devDesc
             }
             
-            // DEBUG:
             configurationDescriptor = try withBridgingIOReturnError {
-                var configDesc = IOUSBConfigurationDescriptor()
+                var rawConfigDesc = IOUSBConfigurationDescriptor()
                 var request = IOUSBDevRequest()
                 request.bmRequestType = DeviceRequestRequestType.requestType(.toHost, .standard, .device).rawValue
                 request.bRequest = DeviceRequestParticularRequest.getDescriptor.rawValue
                 request.wValue = UInt16(USBDescriptorType.configuration.rawValue) << 8
                 request.wIndex = 0
                 request.wLength = 9
-                request.pData = UnsafeMutableRawPointer(&configDesc)
+                request.pData = UnsafeMutableRawPointer(&rawConfigDesc)
                 try device.deviceRequest(&request)
                 
-                var result = BBBUSBConfigurationDescriptor()
-                result.bLength = configDesc.bLength
-                result.bDescriptorType = configDesc.bDescriptorType
-                result.wTotalLength = configDesc.wTotalLength
-                result.bNumInterfaces = configDesc.bNumInterfaces
-                result.bConfigurationValue = configDesc.bConfigurationValue
-                result.iConfiguration = configDesc.iConfiguration
-                result.bmAttributes = configDesc.bmAttributes
-                result.bMaxPower = configDesc.MaxPower
-                if result.iConfiguration != 0 {
-                    result.configurationString = try device.getStringDescriptor(of: result.iConfiguration)
+                var configDesc = BBBUSBConfigurationDescriptor()
+                configDesc.bLength = rawConfigDesc.bLength
+                configDesc.bDescriptorType = rawConfigDesc.bDescriptorType
+                configDesc.wTotalLength = rawConfigDesc.wTotalLength
+                configDesc.bNumInterfaces = rawConfigDesc.bNumInterfaces
+                configDesc.bConfigurationValue = rawConfigDesc.bConfigurationValue
+                configDesc.iConfiguration = rawConfigDesc.iConfiguration
+                configDesc.bmAttributes = rawConfigDesc.bmAttributes
+                configDesc.bMaxPower = rawConfigDesc.MaxPower
+                if configDesc.iConfiguration != 0 {
+                    configDesc.configurationString = try device.getStringDescriptor(at: configDesc.iConfiguration)
                 }
                 
                 if configDesc.wTotalLength > 9 {
@@ -168,8 +168,7 @@ public class BBBUSBDevice: CustomStringConvertible {
                     var available = configDesc.wTotalLength - 9
                     for _ in 0..<configDesc.bNumInterfaces {
                         guard ptr[0] == 9 && ptr[1] == USBDescriptorType.interface.rawValue && available >= 9 else {
-                            // FIXME:
-                            return result
+                            throw BBBUSBDeviceError.illegalDescriptor
                         }
                         var ifDesc = BBBUSBInterfaceDescriptor()
                         ifDesc.bLength = ptr[0]
@@ -186,8 +185,7 @@ public class BBBUSBDevice: CustomStringConvertible {
                         
                         for _ in 0..<ifDesc.bNumEndpoints {
                             guard ptr[0] == 7 && ptr[1] == USBDescriptorType.endpoint.rawValue && available >= 7 else {
-                                // FIXME:
-                                return result
+                                throw BBBUSBDeviceError.illegalDescriptor
                             }
                             var epDesc = BBBUSBEndpointDescriptor()
                             epDesc.bLength = ptr[0]
@@ -202,15 +200,15 @@ public class BBBUSBDevice: CustomStringConvertible {
                             ifDesc.endpoints.append(epDesc)
                         }
                         
-                        result.interfaces.append(ifDesc)
+                        configDesc.interfaces.append(ifDesc)
                     }
                     
                     if available != 0 {
-                        // TODO: error
+                        throw BBBUSBDeviceError.illegalDescriptor
                     }
                 }
                 
-                return result
+                return configDesc
             }
         }
         catch {

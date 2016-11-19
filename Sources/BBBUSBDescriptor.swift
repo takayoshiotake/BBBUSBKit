@@ -6,6 +6,10 @@
 //  Copyright © 2016 OTAKE Takayoshi. All rights reserved.
 //
 
+//
+//  Refer to "Universal Serial Bus Specification Revision 2.0 (April 27, 2000)" for more information.
+//
+
 import Cocoa
 
 public struct BBBUSBDeviceDescriptor {

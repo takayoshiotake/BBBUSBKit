@@ -107,7 +107,7 @@
     return true;
 }
 
-- (NSString *)getStringDescriptorOfIndex:(UInt8)index error:(NSError **)error {
+- (NSString *)getStringDescriptorAtIndex:(UInt8)index error:(NSError **)error {
     UInt8 temp[2];
     IOUSBDevRequest request;
     request.bmRequestType = USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice);
