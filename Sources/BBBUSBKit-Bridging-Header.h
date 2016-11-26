@@ -8,6 +8,5 @@
 
 #import "BBBUSBKitCore.h"
 
-#import "USBPlugInInterface.h"
 #import "USBDeviceInterface.h"
 #import "USBInterfaceInterface.h"

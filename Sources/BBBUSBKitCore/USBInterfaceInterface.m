@@ -18,6 +18,31 @@
 
 @implementation USBInterfaceInterface
 
+- (instancetype)initWithService:(io_service_t)service device:(USBDeviceInterface *)device {
+    self = [super init];
+    if (self) {
+        IOCFPlugInInterface ** plugInInterface;
+        SInt32 score;
+        
+        // Use IOReturn instead kern_return_t
+        IOReturn err;
+        err = IOCreatePlugInInterfaceForService(service, kIOUSBInterfaceUserClientTypeID, kIOCFPlugInInterfaceID, &plugInInterface, &score);
+        if (err != kIOReturnSuccess) {
+            return nil; // `dealloc` will be called
+        }
+        err = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceIDLatest), (LPVOID)&_interface);
+        if (err != kIOReturnSuccess) {
+            // Ignore result
+            IODestroyPlugInInterface(plugInInterface);
+            return nil; // `dealloc` will be called
+        }
+        
+        // Ignore result
+        IODestroyPlugInInterface(plugInInterface);
+    }
+    return self;
+}
+
 - (instancetype)initWithInterface:(IOUSBInterfaceInterfaceLatest **)interface device:(USBDeviceInterface *)device {
     self = [super init];
     if (self) {

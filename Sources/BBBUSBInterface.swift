@@ -19,7 +19,7 @@ public class BBBUSBInterface {
     init?(service: io_service_t, device: BBBUSBDevice, descriptor: BBBUSBInterfaceDescriptor) {
         self.service = service
 
-        guard let plugInInterface = USBPlugInInterface(service: service, plugInType: .interface), let interface = plugInInterface.queryUSBInterfaceInterface(device.device) else {
+        guard let interface = USBInterfaceInterface(service: service, device: device.device) else {
             IOObjectRelease(service)
             return nil // `deinit` is not called
         }

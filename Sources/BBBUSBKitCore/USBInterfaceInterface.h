@@ -17,6 +17,7 @@
 @property (weak, nonatomic, readonly) USBDeviceInterface * device;
 @property (assign, nonatomic, readonly) IOUSBInterfaceDescriptor interfaceDescriptor;
 
+- (instancetype)initWithService:(io_service_t)service device:(USBDeviceInterface *)device;
 - (instancetype)initWithInterface:(IOUSBInterfaceInterfaceLatest **)interface device:(USBDeviceInterface *)device;
 
 @end

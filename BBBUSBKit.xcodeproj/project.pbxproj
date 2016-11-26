@@ -16,8 +16,6 @@
 		12187FFC1DCF49FE001909E4 /* BBBUSBDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12187FFB1DCF49FE001909E4 /* BBBUSBDevice.swift */; };
 		1218800A1DCF5FC2001909E4 /* USBDeviceInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 121880061DCF5FC2001909E4 /* USBDeviceInterface.h */; };
 		1218800B1DCF5FC2001909E4 /* USBDeviceInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 121880071DCF5FC2001909E4 /* USBDeviceInterface.m */; };
-		1218800C1DCF5FC2001909E4 /* USBPlugInInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 121880081DCF5FC2001909E4 /* USBPlugInInterface.h */; };
-		1218800D1DCF5FC2001909E4 /* USBPlugInInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 121880091DCF5FC2001909E4 /* USBPlugInInterface.m */; };
 		12D32A701DD0B5B000898D95 /* BBBUSBKitCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D32A6F1DD0B5B000898D95 /* BBBUSBKitCore.m */; };
 		12D32AC71DD0CB8F00898D95 /* BBBUSBKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D32AC61DD0CB8F00898D95 /* BBBUSBKit.swift */; };
 		12D32AC91DD0CCBD00898D95 /* BBBUSBInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D32AC81DD0CCBD00898D95 /* BBBUSBInterface.swift */; };
@@ -50,8 +48,6 @@
 		12187FFB1DCF49FE001909E4 /* BBBUSBDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBDevice.swift; sourceTree = "<group>"; };
 		121880061DCF5FC2001909E4 /* USBDeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USBDeviceInterface.h; path = BBBUSBKitCore/USBDeviceInterface.h; sourceTree = "<group>"; };
 		121880071DCF5FC2001909E4 /* USBDeviceInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USBDeviceInterface.m; path = BBBUSBKitCore/USBDeviceInterface.m; sourceTree = "<group>"; };
-		121880081DCF5FC2001909E4 /* USBPlugInInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USBPlugInInterface.h; path = BBBUSBKitCore/USBPlugInInterface.h; sourceTree = "<group>"; };
-		121880091DCF5FC2001909E4 /* USBPlugInInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USBPlugInInterface.m; path = BBBUSBKitCore/USBPlugInInterface.m; sourceTree = "<group>"; };
 		12D32A6F1DD0B5B000898D95 /* BBBUSBKitCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBUSBKitCore.m; sourceTree = "<group>"; };
 		12D32AC61DD0CB8F00898D95 /* BBBUSBKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBKit.swift; sourceTree = "<group>"; };
 		12D32AC81DD0CCBD00898D95 /* BBBUSBInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBInterface.swift; sourceTree = "<group>"; };
@@ -129,8 +125,6 @@
 		121880051DCF5F90001909E4 /* BBBUSBKitCore */ = {
 			isa = PBXGroup;
 			children = (
-				121880081DCF5FC2001909E4 /* USBPlugInInterface.h */,
-				121880091DCF5FC2001909E4 /* USBPlugInInterface.m */,
 				121880061DCF5FC2001909E4 /* USBDeviceInterface.h */,
 				121880071DCF5FC2001909E4 /* USBDeviceInterface.m */,
 				12D32ACA1DD0D04400898D95 /* USBInterfaceInterface.h */,
@@ -146,7 +140,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1218800C1DCF5FC2001909E4 /* USBPlugInInterface.h in Headers */,
 				12D32ACC1DD0D04400898D95 /* USBInterfaceInterface.h in Headers */,
 				12187FE91DCF4412001909E4 /* BBBUSBKitCore.h in Headers */,
 				12187FE71DCF4412001909E4 /* BBBUSBKit-Bridging-Header.h in Headers */,
@@ -262,7 +255,6 @@
 				12DF85271DD5275800D12FAE /* BBBUSBDescriptor.swift in Sources */,
 				1218800B1DCF5FC2001909E4 /* USBDeviceInterface.m in Sources */,
 				12D32A701DD0B5B000898D95 /* BBBUSBKitCore.m in Sources */,
-				1218800D1DCF5FC2001909E4 /* USBPlugInInterface.m in Sources */,
 				12D32AC91DD0CCBD00898D95 /* BBBUSBInterface.swift in Sources */,
 				12187FFC1DCF49FE001909E4 /* BBBUSBDevice.swift in Sources */,
 				12D32ACD1DD0D04400898D95 /* USBInterfaceInterface.m in Sources */,

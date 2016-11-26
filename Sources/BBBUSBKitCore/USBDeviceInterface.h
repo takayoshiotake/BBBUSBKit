@@ -14,6 +14,7 @@
 
 @property (assign, nonatomic, readonly) IOUSBDeviceInterfaceLatest ** device;
 
+- (instancetype)initWithService:(io_service_t)service;
 - (instancetype)initWithDevice:(IOUSBDeviceInterfaceLatest **)device;
 
 - (IOUSBConfigurationDescriptor *)getConfigurationDescriptor:(NSError **)error;
