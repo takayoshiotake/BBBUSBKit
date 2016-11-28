@@ -158,16 +158,18 @@ public class BBBUSBDevice: CustomStringConvertible {
                 }
                 
                 if configDesc.wTotalLength > 9 {
-                    // Get interfaceDescriptor, endpointDescriptor
+                    // TODO: interfaceAssociationDescriptor (bDescriptorType=0x0b)
+                    
+                    // Get interfaceDescriptor, endpointDescriptor, ...
                     var configDescBytes = [UInt8](repeating: 0, count: Int(configDesc.wTotalLength))
                     request.wLength = configDesc.wTotalLength
                     request.pData = UnsafeMutableRawPointer(&configDescBytes[0])
                     try device.deviceRequest(&request)
                     
                     var ptr = withUnsafePointer(to: &configDescBytes[9]) { $0 }
-                    var available = configDesc.wTotalLength - 9
+                    var available = Int(configDesc.wTotalLength) - 9
                     for _ in 0..<configDesc.bNumInterfaces {
-                        guard ptr[0] == 9 && ptr[1] == USBDescriptorType.interface.rawValue && available >= 9 else {
+                        guard available >= 9 && ptr[0] == 9 && ptr[1] == USBDescriptorType.interface.rawValue else {
                             throw BBBUSBDeviceError.illegalDescriptor
                         }
                         var ifDesc = BBBUSBInterfaceDescriptor()
@@ -183,29 +185,49 @@ public class BBBUSBDevice: CustomStringConvertible {
                         ptr = ptr.advanced(by: 9)
                         available -= 9
                         
-                        // FIXME:
-//                        for _ in 0..<ifDesc.bNumEndpoints {
-//                            guard ptr[0] == 7 && ptr[1] == USBDescriptorType.endpoint.rawValue && available >= 7 else {
-//                                throw BBBUSBDeviceError.illegalDescriptor
-//                            }
-//                            var epDesc = BBBUSBEndpointDescriptor()
-//                            epDesc.bLength = ptr[0]
-//                            epDesc.bDescriptorType = ptr[1]
-//                            epDesc.bEndpointAddress = ptr[2]
-//                            epDesc.bmAttributes = ptr[3]
-//                            epDesc.wMaxPacketSize = UInt16(ptr[4]) | UInt16(ptr[5]) << 8
-//                            epDesc.bInterval = ptr[6]
-//                            ptr = ptr.advanced(by: 7)
-//                            available -= 7
-//                            
-//                            ifDesc.endpoints.append(epDesc)
-//                        }
+                        repeat {
+                            if available >= 2 && ptr[1] == USBDescriptorType.endpoint.rawValue {
+                                break // reach endpointDescriptor
+                            }
+
+                            // Get classSpecificDescriptor
+                            let bLength = Int(ptr[0])
+                            guard available >= bLength else {
+                                throw BBBUSBDeviceError.illegalDescriptor
+                            }
+                            
+                            var bytes = [UInt8](repeating: 0, count: bLength)
+                            // FIXME:
+                            for i in 0..<bLength {
+                                bytes[i] = ptr[i]
+                            }
+                            // TODO: Store the `bytes` to somewhere
+                            ptr = ptr.advanced(by: bLength)
+                            available -= bLength
+                        } while true
+                        
+                        for _ in 0..<ifDesc.bNumEndpoints {
+                            guard available >= 7 && ptr[0] == 7 && ptr[1] == USBDescriptorType.endpoint.rawValue else {
+                                throw BBBUSBDeviceError.illegalDescriptor
+                            }
+                            var epDesc = BBBUSBEndpointDescriptor()
+                            epDesc.bLength = ptr[0]
+                            epDesc.bDescriptorType = ptr[1]
+                            epDesc.bEndpointAddress = ptr[2]
+                            epDesc.bmAttributes = ptr[3]
+                            epDesc.wMaxPacketSize = UInt16(ptr[4]) | UInt16(ptr[5]) << 8
+                            epDesc.bInterval = ptr[6]
+                            ptr = ptr.advanced(by: 7)
+                            available -= 7
+                            
+                            ifDesc.endpoints.append(epDesc)
+                        }
                         
                         configDesc.interfaces.append(ifDesc)
                     }
                     
                     if available != 0 {
-//                        throw BBBUSBDeviceError.illegalDescriptor
+                        throw BBBUSBDeviceError.illegalDescriptor
                     }
                 }
                 
