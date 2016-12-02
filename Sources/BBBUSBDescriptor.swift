@@ -49,6 +49,9 @@ public struct BBBUSBConfigurationDescriptor {
     public var configurationString: String? = nil
     public var interfaces: [BBBUSBInterfaceDescriptor] = []
     
+    // [descriptorType : bytes]
+    public var descriptors: [UInt8 : [UInt8]] = [:]
+    
     init() {
     }
 }
@@ -66,6 +69,9 @@ public struct BBBUSBInterfaceDescriptor {
     
     public var interfaceString: String? = nil
     public var endpoints: [BBBUSBEndpointDescriptor] = []
+    
+    // [descriptorType : bytes]
+    public var descriptors: [UInt8 : [UInt8]] = [:]
     
     init() {
     }
