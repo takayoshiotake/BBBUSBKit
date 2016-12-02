@@ -58,4 +58,18 @@ class BBBUSBKitTests: XCTestCase {
         }
     }
     
+    func testMyKeyboard() {
+        let idVendor = 0x05d5 as UInt16
+        let idProduct = 0x624c as UInt16
+        let um = BBBUSBManager()
+        if let device = um.listDevices()?.filter({ $0.descriptor.idVendor == idVendor && $0.descriptor.idProduct == idProduct }).first {
+            XCTAssertEqual(device.descriptor.productString, "USB KB")
+            
+            let interface = try! device.listInterfaces().first!
+            let endpoint = interface.listEndpoints().first!
+            XCTAssertEqual(endpoint.direction, .in)
+            XCTAssertEqual(endpoint.transferType, .interrupt)
+        }
+    }
+    
 }

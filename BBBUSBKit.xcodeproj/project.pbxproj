@@ -16,6 +16,7 @@
 		12187FFC1DCF49FE001909E4 /* BBBUSBDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12187FFB1DCF49FE001909E4 /* BBBUSBDevice.swift */; };
 		1218800A1DCF5FC2001909E4 /* USBDeviceInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 121880061DCF5FC2001909E4 /* USBDeviceInterface.h */; };
 		1218800B1DCF5FC2001909E4 /* USBDeviceInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 121880071DCF5FC2001909E4 /* USBDeviceInterface.m */; };
+		12AF20731DF1C6E3001340C3 /* BBBUSBEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AF20721DF1C6E3001340C3 /* BBBUSBEndpoint.swift */; };
 		12D32A701DD0B5B000898D95 /* BBBUSBKitCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D32A6F1DD0B5B000898D95 /* BBBUSBKitCore.m */; };
 		12D32AC71DD0CB8F00898D95 /* BBBUSBKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D32AC61DD0CB8F00898D95 /* BBBUSBKit.swift */; };
 		12D32AC91DD0CCBD00898D95 /* BBBUSBInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D32AC81DD0CCBD00898D95 /* BBBUSBInterface.swift */; };
@@ -48,6 +49,7 @@
 		12187FFB1DCF49FE001909E4 /* BBBUSBDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBDevice.swift; sourceTree = "<group>"; };
 		121880061DCF5FC2001909E4 /* USBDeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USBDeviceInterface.h; path = BBBUSBKitCore/USBDeviceInterface.h; sourceTree = "<group>"; };
 		121880071DCF5FC2001909E4 /* USBDeviceInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = USBDeviceInterface.m; path = BBBUSBKitCore/USBDeviceInterface.m; sourceTree = "<group>"; };
+		12AF20721DF1C6E3001340C3 /* BBBUSBEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBEndpoint.swift; sourceTree = "<group>"; };
 		12D32A6F1DD0B5B000898D95 /* BBBUSBKitCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBUSBKitCore.m; sourceTree = "<group>"; };
 		12D32AC61DD0CB8F00898D95 /* BBBUSBKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBKit.swift; sourceTree = "<group>"; };
 		12D32AC81DD0CCBD00898D95 /* BBBUSBInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBUSBInterface.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				12DF85261DD5275800D12FAE /* BBBUSBDescriptor.swift */,
 				12187FFB1DCF49FE001909E4 /* BBBUSBDevice.swift */,
 				12D32AC81DD0CCBD00898D95 /* BBBUSBInterface.swift */,
+				12AF20721DF1C6E3001340C3 /* BBBUSBEndpoint.swift */,
 				12187FE21DCF4412001909E4 /* BBBUSBKitCore.h */,
 				12D32A6F1DD0B5B000898D95 /* BBBUSBKitCore.m */,
 				121880051DCF5F90001909E4 /* BBBUSBKitCore */,
@@ -256,6 +259,7 @@
 				1218800B1DCF5FC2001909E4 /* USBDeviceInterface.m in Sources */,
 				12D32A701DD0B5B000898D95 /* BBBUSBKitCore.m in Sources */,
 				12D32AC91DD0CCBD00898D95 /* BBBUSBInterface.swift in Sources */,
+				12AF20731DF1C6E3001340C3 /* BBBUSBEndpoint.swift in Sources */,
 				12187FFC1DCF49FE001909E4 /* BBBUSBDevice.swift in Sources */,
 				12D32ACD1DD0D04400898D95 /* USBInterfaceInterface.m in Sources */,
 				12187FEB1DCF4412001909E4 /* BBBUSBManager.swift in Sources */,
